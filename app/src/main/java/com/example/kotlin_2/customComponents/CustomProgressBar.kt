@@ -21,31 +21,40 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.example.kotlin_2.repository.GoalRepository
+import com.example.kotlin_2.screen.HomeScreen
 
+var goalRepository by mutableStateOf(GoalRepository())
+var activeGoal by mutableStateOf(goalRepository.getActiveGoal())
+var stepGoal by mutableStateOf(activeGoal?.steps)
 
 @Composable
 fun CustomProgressBar(
+
     canvasSize: Dp = 250.dp,
     indicatorValue: Int = 0,
-    maxIndicatorValue: Int = 5000,
     backgroundIndicatorColor: Color = Color.Gray.copy(alpha = 0.1f),
     backgroundIndicatorStrokeWidth: Float = 50f,
     foregroundIndicatorColor: Color = Color.Cyan,
     foregroundIndicatorStrokeWidth: Float = 50f,
 
-    smallText: String = "Remaining",
+    smallText: String = "Goal: " + (activeGoal?.name),
     smallTextColor: Color = Color.Gray.copy(alpha = 0.6f),
     stepsInfoColor: Color = Color.Black,
     smallTextFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
     stepsInfoFontSize: TextUnit = MaterialTheme.typography.h4.fontSize,
-) {
+
+    ) {
+    var maxIndicatorValue = stepGoal
     var allowedMaxIndicatorValue by remember {
         mutableStateOf(maxIndicatorValue)
     }
-    allowedMaxIndicatorValue = if (indicatorValue <= maxIndicatorValue) {
+    allowedMaxIndicatorValue = if (indicatorValue <= maxIndicatorValue!!) {
         indicatorValue
     } else {
         maxIndicatorValue
@@ -53,7 +62,7 @@ fun CustomProgressBar(
 
     var animatedIndicatorValue by remember { mutableStateOf(0f) }
     LaunchedEffect(key1 = allowedMaxIndicatorValue) {
-        animatedIndicatorValue = allowedMaxIndicatorValue.toFloat()
+        animatedIndicatorValue = allowedMaxIndicatorValue!!.toFloat()
     }
 
     val sweepAngle by animateFloatAsState(
@@ -69,8 +78,9 @@ fun CustomProgressBar(
     )
 
 
-    var stepsInfo = (maxIndicatorValue - allowedMaxIndicatorValue).toString()
 
+    //val stepsInfo = (maxIndicatorValue - allowedMaxIndicatorValue).toString()
+    val stepsInfo = "$indicatorValue/$maxIndicatorValue"
     Column(
         modifier = Modifier
             .size(canvasSize)
