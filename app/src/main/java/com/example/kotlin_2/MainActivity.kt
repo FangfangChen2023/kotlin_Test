@@ -47,41 +47,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//@Composable
-//fun AddSteps() {
-//    var progress by remember { mutableStateOf(0.1f) }
-//    val animatedProgress = animateFloatAsState(
-//        targetValue = progress,
-//        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
-//    ).value
-//    Column(Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
-//        Spacer(Modifier.height(80.dp))
-//        Text("Total steps taken today:")
-//        Spacer(Modifier.height(100.dp))
-//        CircularProgressIndicator(
-//            progress = animatedProgress,
-//            color = Color.Red
-//        )
-//        Spacer(Modifier.height(120.dp))
-//        var text by remember { mutableStateOf(TextFieldValue("")) }
-//        TextField(
-//            value = text,
-//            onValueChange = {
-//                text = it
-//            },
-//            placeholder = { Text(text = "Add Steps") },
-//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//        )
-//        Spacer(Modifier.height(30.dp))
-//        OutlinedButton(
-//            onClick = {
-//                if (progress < 1f) progress += 0.1f
-//            }
-//        ) {
-//            Text("SUBMIT")
-//        }
-//    }
-//}
 
 
 

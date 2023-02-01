@@ -1,17 +1,56 @@
 package com.example.kotlin_2.screen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import android.R
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.util.Log
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.example.kotlin_2.HistoryListItem
+import com.example.kotlin_2.repository.GoalRepository
+import com.example.kotlin_2.GoalListItem
+import com.example.kotlin_2.repository.HistoryRepository
 
+
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun GoalScreen(){
     Column (Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Goal Screen")
+        Text(text = "Goals")
+
+        var goalRepository by remember {mutableStateOf(GoalRepository())}
+        var allGoals by remember {mutableStateOf(goalRepository.getAllGoals())}
+
+        LazyColumn(
+            contentPadding = PaddingValues(all = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ){
+            itemsIndexed(items = allGoals) { index,
+                                             goalItem ->
+                Log.d("goal", index.toString())
+                GoalListItem(goalItem = goalItem){
+                    goalRepository.setActiveGoal(goalItem)
+                    goalRepository = GoalRepository()
+                }
+
+
+
+            }
+        }
+
 
     }
+
 }
