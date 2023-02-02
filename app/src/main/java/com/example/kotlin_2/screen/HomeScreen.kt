@@ -3,6 +3,7 @@ package com.example.kotlin_2.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -13,17 +14,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.kotlin_2.R
 import com.example.kotlin_2.customComponents.CustomProgressBar
-import com.example.kotlin_2.repository.GoalRepository
 
 @Composable
 fun HomeScreen() {
     var steps by remember { mutableStateOf(0) }
     var stepsInput by remember { mutableStateOf(0) }
+
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(Modifier.height(60.dp))
@@ -62,6 +61,7 @@ fun HomeScreen() {
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             ),
+
             singleLine = true
 
         )

@@ -40,12 +40,10 @@ fun GoalScreen(){
             itemsIndexed(items = allGoals) { index,
                                              goalItem ->
                 Log.d("goal", index.toString())
-                GoalListItem(goalItem = goalItem){
+                GoalListItem(goalItem = goalItem, onClick = {
                     goalRepository.setActiveGoal(goalItem)
                     goalRepository = GoalRepository()
-                }
-
-
+                })
 
             }
         }

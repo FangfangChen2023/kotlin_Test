@@ -78,8 +78,6 @@ fun CustomProgressBar(
     )
 
 
-
-    //val stepsInfo = (maxIndicatorValue - allowedMaxIndicatorValue).toString()
     val stepsInfo = "$indicatorValue/$maxIndicatorValue"
     Column(
         modifier = Modifier
