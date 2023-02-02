@@ -3,6 +3,7 @@ package com.example.kotlin_2
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.RoundedCorner
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateFloatAsState
@@ -19,12 +20,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.compose.rememberNavController
 /*test1*/
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             Kotlin_2Theme {
                 // A surface container using the 'background' color from the theme
@@ -44,6 +49,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
     }
 }
 
