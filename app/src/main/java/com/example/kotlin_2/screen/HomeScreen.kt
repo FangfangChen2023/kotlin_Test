@@ -37,7 +37,9 @@ fun HomeScreen() {
         )
 
         Spacer(Modifier.height(30.dp))
+        //TextField(value = "Progress: " +"h"+ "%" , onValueChange = "h" )
 
+        Spacer(Modifier.height(30.dp))
         OutlinedTextField(
             modifier = Modifier
                 .background(Color.Transparent),
@@ -59,16 +61,19 @@ fun HomeScreen() {
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
+                imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                        onDone = {steps += stepsInput
+                            stepsInput = 0 })
+            )
 
-            singleLine = true
+            //singleLine = true
 
-        )
+        //)
 
         Spacer(Modifier.height(30.dp))
 
-        OutlinedButton(
+        /*OutlinedButton(
             modifier = Modifier
                 .background(Color.Transparent),
             shape = CircleShape,
@@ -79,7 +84,7 @@ fun HomeScreen() {
             }
         ) {
             Text("SUBMIT", color = Color.White)
-        }
+        }*/
     }
 }
 
