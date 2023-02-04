@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -20,20 +21,24 @@ import androidx.compose.ui.unit.dp
 import com.example.kotlin_2.HistoryListItem
 import com.example.kotlin_2.repository.GoalRepository
 import com.example.kotlin_2.GoalListItem
+import com.example.kotlin_2.model.GoalItem
 import com.example.kotlin_2.repository.HistoryRepository
 
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun GoalScreen(){
-    Column (Modifier.fillMaxSize(),horizontalAlignment = Alignment.CenterHorizontally) {
+    Column (modifier = Modifier
+        .fillMaxSize()
+        ,horizontalAlignment = Alignment.CenterHorizontally) {
 
         Text(text = "Goals")
 
         var goalRepository by remember {mutableStateOf(GoalRepository())}
         var allGoals by remember {mutableStateOf(goalRepository.getAllGoals())}
 
-        LazyColumn(
+        LazyColumn(modifier = Modifier
+            .fillMaxWidth(),
             contentPadding = PaddingValues(all = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ){
@@ -41,14 +46,11 @@ fun GoalScreen(){
                                              goalItem ->
                 Log.d("goal", index.toString())
                 GoalListItem(goalItem = goalItem, onClick = {
-                    goalRepository.setActiveGoal(goalItem)
                     goalRepository = GoalRepository()
+                    goalRepository.setActiveGoal(goalItem)
                 })
-
             }
         }
-
-
     }
-
 }
+

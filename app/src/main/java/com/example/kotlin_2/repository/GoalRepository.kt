@@ -27,7 +27,7 @@ class GoalRepository {
         )
     }
     fun getActiveGoal(): GoalItem? {
-        val allGoals =  getAllGoals()
+        val allGoals = getAllGoals()
         for (goal in allGoals){
             if (goal.active){
                 return goal
