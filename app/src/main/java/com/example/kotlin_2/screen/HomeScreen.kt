@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -22,6 +23,7 @@ import com.example.kotlin_2.customComponents.CustomProgressBar
 fun HomeScreen() {
     var steps by remember { mutableStateOf(0) }
     var stepsInput by remember { mutableStateOf(0) }
+    val focusManager = LocalFocusManager.current
 
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -64,7 +66,7 @@ fun HomeScreen() {
                 imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                         onDone = {steps += stepsInput
-                            stepsInput = 0 })
+                            stepsInput = 0; focusManager.clearFocus() })
             )
 
             //singleLine = true
