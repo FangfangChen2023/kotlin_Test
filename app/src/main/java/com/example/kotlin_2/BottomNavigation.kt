@@ -1,16 +1,13 @@
 package com.example.kotlin_2
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageShader
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,7 +16,6 @@ import com.example.kotlin_2.screen.GoalScreen
 import com.example.kotlin_2.screen.HistoryScreen
 import com.example.kotlin_2.screen.HomeScreen
 
-//import com.example.reply.R
 
 object ReplyRoute {
     const val HOME = "Home"
@@ -31,7 +27,7 @@ data class ReplyTopLevelDestination(
     val route: String,
     val selectedIcon: Int,
     val unselectedIcon: Int,
-    val iconTextId: Int,
+    val iconText: String,
 )
 
 class ReplyNavigationActions(private val navController: NavHostController) {
@@ -79,10 +75,16 @@ fun BottomNavigationBar(
     ) {
         items.forEach { item ->
             BottomNavigationItem(
+                label = {
+                        Text(text=item.iconText)
+                },
                 selected = item.route == navController.currentDestination?.route,
                 onClick = { onItemClick(item) },
                 icon = {
-                        Icon(painter = painterResource(id = item.selectedIcon),  contentDescription = null)
+                        Icon(
+                            painter = painterResource(id = item.selectedIcon),
+                            contentDescription = null
+                        )
 
                 }
             )
@@ -96,18 +98,18 @@ val TOP_LEVEL_DESTINATIONS = listOf(
         route = ReplyRoute.HOME,
         selectedIcon = R.drawable.baseline_home_24,
         unselectedIcon = R.drawable.baseline_home_24,
-        iconTextId = R.string.home
+        iconText = "Home"
     ),
     ReplyTopLevelDestination(
         route = ReplyRoute.HISTORY,
         selectedIcon = R.drawable.baseline_history_24,
         unselectedIcon = R.drawable.baseline_history_24,
-        iconTextId = R.string.history
+        iconText = "History"
     ),
     ReplyTopLevelDestination(
         route = ReplyRoute.Goal,
         selectedIcon = R.drawable.baseline_star_rate_24,
         unselectedIcon = R.drawable.baseline_star_rate_24,
-        iconTextId = R.string.goal
+        iconText = "Goal"
     ),
 )

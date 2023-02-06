@@ -39,7 +39,7 @@ fun HomeScreen() {
         Spacer(Modifier.height(30.dp))
         //TextField(value = "Progress: " +"h"+ "%" , onValueChange = "h" )
 
-        Spacer(Modifier.height(30.dp))
+        Spacer(Modifier.height(20.dp))
         OutlinedTextField(
             modifier = Modifier
                 .background(Color.Transparent),
@@ -69,22 +69,7 @@ fun HomeScreen() {
 
             //singleLine = true
 
-        //)
 
-        Spacer(Modifier.height(30.dp))
-
-        /*OutlinedButton(
-            modifier = Modifier
-                .background(Color.Transparent),
-            shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.teal_200)),
-            onClick = {
-                steps += stepsInput
-                stepsInput = 0
-            }
-        ) {
-            Text("SUBMIT", color = Color.White)
-        }*/
     }
 }
 

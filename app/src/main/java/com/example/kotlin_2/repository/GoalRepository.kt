@@ -1,7 +1,6 @@
 package com.example.kotlin_2.repository
 
 import com.example.kotlin_2.model.GoalItem
-import com.example.kotlin_2.model.HistoryItem
 
 class GoalRepository {
 

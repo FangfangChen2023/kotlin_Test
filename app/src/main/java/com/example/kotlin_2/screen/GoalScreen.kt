@@ -18,11 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.kotlin_2.HistoryListItem
 import com.example.kotlin_2.repository.GoalRepository
 import com.example.kotlin_2.GoalListItem
 import com.example.kotlin_2.model.GoalItem
-import com.example.kotlin_2.repository.HistoryRepository
 
 
 @SuppressLint("UnrememberedMutableState")
