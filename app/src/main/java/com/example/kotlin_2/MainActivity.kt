@@ -33,10 +33,11 @@ import kotlinx.coroutines.launch
 
 /*test1*/
 class MainActivity : ComponentActivity() {
+    val PREFS_NAME = "currentSteps"
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        getSharedPreferences(PREFS_NAME, 0)
         setContent {
             Kotlin_2Theme {
                 // A surface container using the 'background' color from the theme
