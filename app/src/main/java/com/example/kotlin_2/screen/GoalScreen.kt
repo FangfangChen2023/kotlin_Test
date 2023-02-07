@@ -1,5 +1,6 @@
 package com.example.kotlin_2.screen
 
+import DataBaseHandler
 import android.R
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -32,8 +33,12 @@ fun GoalScreen(){
 
         Text(text = "Goals")
 
-        var goalRepository by remember {mutableStateOf(GoalRepository())}
-        var allGoals by remember {mutableStateOf(goalRepository.getAllGoals())}
+        //var goalRepository by remember {mutableStateOf(GoalRepository())}
+        //var allGoals by remember {mutableStateOf(goalRepository.getAllGoals())}
+        val context = LocalContext.current
+        val db = DataBaseHandler(context)
+        //var allGoals = db.readData()
+        var allGoals by remember {mutableStateOf(db.readData())}
 
         LazyColumn(modifier = Modifier
             .fillMaxWidth(),
@@ -43,10 +48,12 @@ fun GoalScreen(){
             itemsIndexed(items = allGoals) { index,
                                              goalItem ->
                 Log.d("goal", index.toString())
-                GoalListItem(goalItem = goalItem, onClick = {
-                    goalRepository = GoalRepository()
-                    goalRepository.setActiveGoal(goalItem)
-                })
+                GoalListItem(goalItem = goalItem,
+                    onClick = {
+                        db.updateGoals(goalItem)
+                        allGoals = db.readData()
+                }
+                )
             }
         }
     }

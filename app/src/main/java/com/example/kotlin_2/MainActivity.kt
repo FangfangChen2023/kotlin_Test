@@ -1,5 +1,6 @@
 package com.example.kotlin_2
 
+import DataBaseHandler
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.RoundedCorner
@@ -29,6 +30,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_2.model.BarChartViewModel
+import com.example.kotlin_2.model.GoalItem
 import kotlinx.coroutines.launch
 
 /*test1*/
@@ -41,7 +43,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             Kotlin_2Theme {
                 // A surface container using the 'background' color from the theme
-               val navController = rememberNavController()
+                val context = this
+                //create goal database, initialise with default goals
+                val db = DataBaseHandler(context)
+                //TODO delete this before actually showing the app
+                db.clearDatabase()
+                val defaultGoal = GoalItem("default", 5000, true)
+                val testGoal = GoalItem("test", 3000, false)
+                db.insert(testGoal)
+                db.insert(defaultGoal)
+                val navController = rememberNavController()
                 Scaffold(
                     bottomBar = {
                         BottomNavigationBar(
