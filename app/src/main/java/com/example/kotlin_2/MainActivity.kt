@@ -29,29 +29,35 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.example.kotlin_2.model.BarChartViewModel
+//import com.example.kotlin_2.model.BarChartViewModel
 import com.example.kotlin_2.model.GoalItem
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 /*test1*/
 class MainActivity : ComponentActivity() {
     val PREFS_NAME = "currentSteps"
+    val PREFS_DAY = "date"
+    val PREFS_GOAL = "goal"
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getSharedPreferences(PREFS_NAME, 0)
+        getSharedPreferences(PREFS_DAY, 0)
+        getSharedPreferences(PREFS_GOAL, 0)
         setContent {
             Kotlin_2Theme {
                 // A surface container using the 'background' color from the theme
-                val context = this
+                //val context = this
                 //create goal database, initialise with default goals
-                val db = DataBaseHandler(context)
+                //val db = DataBaseHandler(context)
                 //TODO delete this before actually showing the app
                 //db.clearDatabase()
-                val defaultGoal = GoalItem("default", 5000, true)
+                //val defaultGoal = GoalItem("default", 5000, true)
                 //val testGoal = GoalItem("test", 3000, false)
-                //db.insert(testGoal)
-                //db.insert(defaultGoal)
+                //db.insertGoal(testGoal)
+                //db.insertGoal(defaultGoal)
+
                 val navController = rememberNavController()
                 Scaffold(
                     bottomBar = {

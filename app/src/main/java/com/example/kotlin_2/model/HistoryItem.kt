@@ -12,6 +12,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.time.LocalDateTime
+
+data class HistoryItem(
+    val date: LocalDateTime,
+    var name: String,
+    var steps: Int
+)
 
 
 //data class HistoryItem(
@@ -20,7 +27,7 @@ import kotlinx.coroutines.flow.update
 //        )
 
 
-class BarChartViewModel {
+//class BarChartViewModel {
 
 //    private val chartState = MutableStateFlow(Unit)
 //    val uiState: StateFlow<Unit> = chartState.asStateFlow()
@@ -30,4 +37,4 @@ class BarChartViewModel {
 //            HorizontalBarChart(horizontalBarData = barChartData, color = Color.Gray, onBarClick = {})
 //        }
 //    }
-}
+//}
