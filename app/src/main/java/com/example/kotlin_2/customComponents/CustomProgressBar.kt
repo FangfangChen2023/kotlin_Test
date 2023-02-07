@@ -1,5 +1,6 @@
 package com.example.kotlin_2.customComponents
 
+import kotlin.math.roundToInt
 import DataBaseHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -48,8 +49,10 @@ fun CustomProgressBar(
 
     //smallText: String = "Goal: " + (activeGoal.name),
     smallTextColor: Color = Color.Gray.copy(alpha = 0.6f),
+    smallText2Color: Color = Color.Gray.copy(alpha = 0.6f),
     stepsInfoColor: Color = Color.Black,
     smallTextFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
+    smallText2FontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
     stepsInfoFontSize: TextUnit = MaterialTheme.typography.h4.fontSize,
 
     ) {
@@ -61,6 +64,7 @@ fun CustomProgressBar(
     var allowedMaxIndicatorValue by remember {
         mutableStateOf(maxIndicatorValue)
     }
+
     allowedMaxIndicatorValue = if (indicatorValue <= maxIndicatorValue!!) {
         indicatorValue
     } else {
@@ -68,6 +72,7 @@ fun CustomProgressBar(
     }
 
     var smallText: String = "Goal: " + (activeGoal.name)
+
 
     var animatedIndicatorValue by remember { mutableStateOf(0f) }
     LaunchedEffect(key1 = allowedMaxIndicatorValue) {
@@ -88,7 +93,10 @@ fun CustomProgressBar(
 
 
     val stepsInfo = "$indicatorValue/$maxIndicatorValue"
-    Column(
+    //var percentage by remember {mutableStateOf((indicatorValue/maxIndicatorValue) * 100)}
+    var percentage = ((indicatorValue.toDouble()/maxIndicatorValue) * 100).roundToInt()
+    var smallText2 = "$percentage%" //by remember {mutableStateOf("$percentage%")}
+        Column(
         modifier = Modifier
             .size(canvasSize)
             .drawBehind {
@@ -111,9 +119,12 @@ fun CustomProgressBar(
         ElementInsideBar(
             smallText = smallText,
             stepsInfo = stepsInfo,
+            smallText2 = smallText2,
             smallTextColor = smallTextColor,
+            smallText2Color = smallText2Color,
             stepsInfoColor = animatedStepsInfo,
             smallTextFontSize = smallTextFontSize,
+            smallText2FontSize = smallText2FontSize,
             stepsInfoFontSize = stepsInfoFontSize,
 
             )
@@ -171,9 +182,12 @@ fun DrawScope.foregroundIndicator(
 fun ElementInsideBar(
     smallText: String,
     stepsInfo: String,
+    smallText2: String,
     smallTextColor: Color,
+    smallText2Color: Color,
     stepsInfoColor: Color,
     smallTextFontSize: TextUnit,
+    smallText2FontSize: TextUnit,
     stepsInfoFontSize: TextUnit
 ) {
     Text(
@@ -187,6 +201,12 @@ fun ElementInsideBar(
         color = stepsInfoColor,
         fontSize = stepsInfoFontSize,
         fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center
+    )
+    Text(
+        text = smallText2,
+        color = smallText2Color,
+        fontSize = smallText2FontSize,
         textAlign = TextAlign.Center
     )
 }

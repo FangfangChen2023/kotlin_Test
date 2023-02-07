@@ -47,11 +47,11 @@ class MainActivity : ComponentActivity() {
                 //create goal database, initialise with default goals
                 val db = DataBaseHandler(context)
                 //TODO delete this before actually showing the app
-                db.clearDatabase()
+                //db.clearDatabase()
                 val defaultGoal = GoalItem("default", 5000, true)
-                val testGoal = GoalItem("test", 3000, false)
-                db.insert(testGoal)
-                db.insert(defaultGoal)
+                //val testGoal = GoalItem("test", 3000, false)
+                //db.insert(testGoal)
+                //db.insert(defaultGoal)
                 val navController = rememberNavController()
                 Scaffold(
                     bottomBar = {

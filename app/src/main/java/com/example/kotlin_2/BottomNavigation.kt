@@ -110,6 +110,6 @@ val TOP_LEVEL_DESTINATIONS = listOf(
         route = ReplyRoute.Goal,
         selectedIcon = R.drawable.baseline_star_rate_24,
         unselectedIcon = R.drawable.baseline_star_rate_24,
-        iconText = "Goal"
+        iconText = "Goals"
     ),
 )

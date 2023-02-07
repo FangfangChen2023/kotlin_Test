@@ -92,7 +92,7 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
                 return(goalItem)
 
         }
-        Toast.makeText(context, "Failed, no result for getting active goal", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(context, "Failed, no result for getting active goal", Toast.LENGTH_SHORT).show()
 
         return(GoalItem("default", 5000, true))
     }
