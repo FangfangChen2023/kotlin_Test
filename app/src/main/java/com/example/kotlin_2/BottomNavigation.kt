@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -49,7 +50,6 @@ class ReplyNavigationActions(private val navController: NavHostController) {
     }
 
 }
-
 @Composable
 fun BottomNavGraph(navController: NavHostController){
     NavHost(
@@ -71,15 +71,16 @@ fun BottomNavigationBar(
 ) {
     BottomNavigation(
         modifier = modifier,
-        backgroundColor = Color.Cyan,
+        backgroundColor = Color.LightGray,
+        contentColor = Color.Blue
     ) {
-        items.forEach { item ->
+        items.forEach{item ->
             BottomNavigationItem(
                 label = {
                         Text(text=item.iconText)
                 },
                 selected = item.route == navController.currentDestination?.route,
-                onClick = { onItemClick(item) },
+                onClick = { onItemClick(item)},
                 icon = {
                         Icon(
                             painter = painterResource(id = item.selectedIcon),
@@ -111,5 +112,5 @@ val TOP_LEVEL_DESTINATIONS = listOf(
         selectedIcon = R.drawable.baseline_star_rate_24,
         unselectedIcon = R.drawable.baseline_star_rate_24,
         iconText = "Goals"
-    ),
+    )
 )

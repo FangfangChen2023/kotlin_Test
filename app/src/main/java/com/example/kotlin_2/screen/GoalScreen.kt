@@ -8,13 +8,12 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,19 +22,36 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kotlin_2.GoalListItem
 import com.example.kotlin_2.model.GoalItem
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
 
-
+@Preview
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun GoalScreen() {
+    TopAppBar(
+        title = { Text("iWalk") },
+        actions = {
+            // RowScope here, so these icons will be placed horizontally
+            IconButton(onClick = { /* doSomething() */ }) {
+                Icon(Icons.Filled.Settings, contentDescription = "Localized description")
+            }
+        }
+    )
+
+
     Column(
         modifier = Modifier
             .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(Modifier.height(75.dp))
 
         //Text(text = "Goals")
 
@@ -55,31 +71,32 @@ fun GoalScreen() {
             contentPadding = PaddingValues(all = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            itemsIndexed(items = allGoals) { index,
-                                             goalItem ->
-                Log.d("goal", index.toString())
-                GoalListItem(goalItem = goalItem,
-                    onClick = {
-                        db.updateGoals(goalItem)
-                        allGoals = db.readGoals()
-                        editorGoal.putString("goal", goalItem.name);
-                        editorGoal.commit();
-                    }
-                )
-                if (!goalItem.active) {
-                    Button(onClick = {
-                        db.deleteGoal(goalItem);
-                        allGoals = db.readGoals()
-                    }) {
-                        Text(text = "X", style = TextStyle(fontSize = 10.sp))
+                itemsIndexed(items = allGoals) { index,
+                                                 goalItem ->
+                    Log.d("goal", index.toString())
+                    GoalListItem(goalItem = goalItem,
+                        onClick = {
+                            db.updateGoals(goalItem)
+                            allGoals = db.readGoals()
+                            editorGoal.putString("goal", goalItem.name);
+                            editorGoal.commit();
+                        }
+                    )
+                    if (!goalItem.active) {
+                        Button( onClick = {
+                            db.deleteGoal(goalItem);
+                            allGoals = db.readGoals()
+                        }) {
+                            Text(text = "X", style = TextStyle(fontSize = 16.sp))
+                        }
                     }
                 }
-            }
         }
         var stepsInput by remember { mutableStateOf(0) }
         var nameInput by remember { mutableStateOf("...") }
         var newGoal = GoalItem("new", 0, false)
         val focusManager = LocalFocusManager.current
+        Spacer(Modifier.height(20.dp))
         OutlinedTextField(
             modifier = Modifier
                 .background(androidx.compose.ui.graphics.Color.Transparent),
@@ -94,10 +111,10 @@ fun GoalScreen() {
 
             },
             label = { Text(text = "Add Steps for New Goal") },
-            placeholder = { Text(text = "0") },
+            placeholder = { Text(text = "") },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = androidx.compose.ui.graphics.Color.Cyan,
-                unfocusedBorderColor = androidx.compose.ui.graphics.Color.Cyan
+                focusedBorderColor = androidx.compose.ui.graphics.Color.Blue,
+                unfocusedBorderColor = androidx.compose.ui.graphics.Color.Blue
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
@@ -125,8 +142,8 @@ fun GoalScreen() {
             label = { Text(text = "Add Name for New Goal") },
             placeholder = { Text(text = "") },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = androidx.compose.ui.graphics.Color.Cyan,
-                unfocusedBorderColor = androidx.compose.ui.graphics.Color.Cyan
+                focusedBorderColor = androidx.compose.ui.graphics.Color.Blue,
+                unfocusedBorderColor = androidx.compose.ui.graphics.Color.Blue
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
