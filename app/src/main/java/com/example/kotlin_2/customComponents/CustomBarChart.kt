@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.model.BarData
@@ -19,7 +20,7 @@ var barChartData = listOf(
     HorizontalBarData(2000f,"02/23/2023"),
     HorizontalBarData( 3000f,"02/24/2023")
 )
-
+@Preview
 @Composable
 fun CustomBarChart(
 //    chartData: Map<String, Int>

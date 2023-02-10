@@ -6,9 +6,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateValueAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -29,6 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.core.os.persistableBundleOf
 import com.example.kotlin_2.repository.GoalRepository
 import com.example.kotlin_2.screen.HomeScreen
 
@@ -36,15 +35,15 @@ import com.example.kotlin_2.screen.HomeScreen
 var activeGoal by mutableStateOf(goalRepository.getActiveGoal())
 var stepGoal by mutableStateOf(activeGoal?.steps)*/
 
+
 @Composable
 fun CustomProgressBar(
 
-
-    canvasSize: Dp = 250.dp,
+    canvasSize: Dp = 333.dp,
     indicatorValue: Int = 0,
     backgroundIndicatorColor: Color = Color.Gray.copy(alpha = 0.1f),
     backgroundIndicatorStrokeWidth: Float = 50f,
-    foregroundIndicatorColor: Color = Color.Cyan,
+    //foregroundIndicatorColor: Color = Color.Magenta,
     foregroundIndicatorStrokeWidth: Float = 50f,
 
     //smallText: String = "Goal: " + (activeGoal.name),
@@ -91,11 +90,13 @@ fun CustomProgressBar(
         }
     )
 
-
+    var foregroundIndicatorColor: Color = Color.Red
     val stepsInfo = "$indicatorValue/$maxIndicatorValue"
     //var percentage by remember {mutableStateOf((indicatorValue/maxIndicatorValue) * 100)}
     var percentage = ((indicatorValue.toDouble()/maxIndicatorValue) * 100).roundToInt()
     var smallText2 = "$percentage%" //by remember {mutableStateOf("$percentage%")}
+    if (percentage >= 100) {foregroundIndicatorColor = Color.Green}
+    else if (percentage >= 65 && percentage < 100) {foregroundIndicatorColor = Color.Yellow}
         Column(
         modifier = Modifier
             .size(canvasSize)
@@ -196,6 +197,7 @@ fun ElementInsideBar(
         fontSize = smallTextFontSize,
         textAlign = TextAlign.Center
     )
+    Spacer(Modifier.height(15.dp))
     Text(
         text = stepsInfo,
         color = stepsInfoColor,
@@ -203,6 +205,7 @@ fun ElementInsideBar(
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center
     )
+    Spacer(Modifier.height(15.dp))
     Text(
         text = smallText2,
         color = smallText2Color,

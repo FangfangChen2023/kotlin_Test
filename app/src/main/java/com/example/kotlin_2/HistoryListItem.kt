@@ -1,8 +1,12 @@
 package com.example.kotlin_2
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,12 +28,15 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun HistoryListItem(historyItem : HistoryItem, onClick: () -> Unit){
     var color =
-            Color.Cyan
+            Color.Transparent
 
 
     Row(
         modifier = Modifier
-            .background(color)
+            .border(1.dp, Color.Blue,
+            shape = RoundedCornerShape(12.dp))
+            .background(color,
+            shape = RoundedCornerShape(12.dp))
             .fillMaxSize()
             .padding(24.dp)
             .clickable { onClick() },
@@ -38,23 +45,25 @@ fun HistoryListItem(historyItem : HistoryItem, onClick: () -> Unit){
     ) {
         Text(
             text = historyItem.date.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-            color = Color.White,
-            fontSize = 12.sp,
+            color = Color.Black,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )
         Text(
             text = historyItem.name,
-            color = Color.White,
+            color = Color.Black,
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold
         )
         Text(
             text = historyItem.steps.toString(),
-            color = Color.White,
+            color = Color.Black,
             fontSize = 12.sp
         )
     }
 }
+
+
 //package com.example.kotlin_2
 //
 //import androidx.compose.foundation.background

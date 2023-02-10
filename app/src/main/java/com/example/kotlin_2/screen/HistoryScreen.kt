@@ -11,10 +11,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,14 +34,30 @@ import com.example.kotlin_2.model.GoalItem
 import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.model.BarData
 import kotlinx.coroutines.*
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 
+@Preview
 @Composable
 fun HistoryScreen(
 ){
+    TopAppBar(
+        title = { Text("iWalk") },
+        actions = {
+            // RowScope here, so these icons will be placed horizontally
+            IconButton(onClick = { /* doSomething() */ }) {
+                Icon(Icons.Filled.Settings, contentDescription = "Localized description")
+            }
+        }
+    )
+    //Spacer(Modifier.height(50.dp))
+
     Column(
         modifier = Modifier
             .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(Modifier.height(75.dp))
 
         val context = LocalContext.current
         val db by remember { mutableStateOf(DataBaseHandler(context)) }
