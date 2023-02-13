@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.kotlin_2.screen.GoalScreen
 import com.example.kotlin_2.screen.HistoryScreen
+import com.example.kotlin_2.screen.Home.HomeViewModel
 import com.example.kotlin_2.screen.HomeScreen
 
 
@@ -51,12 +52,15 @@ class ReplyNavigationActions(private val navController: NavHostController) {
 
 }
 @Composable
-fun BottomNavGraph(navController: NavHostController){
+fun BottomNavGraph(
+    navController: NavHostController,
+    homeViewModel: HomeViewModel
+){
     NavHost(
         navController = navController,
         startDestination = "home"
     ){
-        composable("home"){ HomeScreen() }
+        composable("home"){ HomeScreen(homeViewModel) }
         composable("history"){ HistoryScreen() }
         composable("goal"){ GoalScreen() }
     }

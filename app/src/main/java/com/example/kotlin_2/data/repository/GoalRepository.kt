@@ -1,6 +1,6 @@
-package com.example.kotlin_2.repository
+package com.example.kotlin_2.data.repository
 
-import com.example.kotlin_2.model.GoalItem
+import com.example.kotlin_2.data.model.GoalItem
 
 class GoalRepository {
 

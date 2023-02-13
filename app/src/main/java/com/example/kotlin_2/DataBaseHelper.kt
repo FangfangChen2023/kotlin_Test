@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
-import com.example.kotlin_2.model.GoalItem
-import com.example.kotlin_2.model.HistoryItem
+import com.example.kotlin_2.data.model.GoalItem
+import com.example.kotlin_2.data.model.HistoryItem
 import java.time.LocalDateTime
 
 val DATABASENAME = "Steptracker"
@@ -70,7 +70,7 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         insertGoal(goalItem)
     }
 
-    fun deleteGoal(goalItem:GoalItem){
+    fun deleteGoal(goalItem: GoalItem){
         val database = this.writableDatabase
         database.delete(TABLENAME, "name=?", arrayOf(goalItem.name))
     }

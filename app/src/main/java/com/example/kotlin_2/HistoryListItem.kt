@@ -20,9 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.kotlin_2.model.GoalItem
-import com.example.kotlin_2.model.HistoryItem
-import com.example.kotlin_2.repository.GoalRepository
+import com.example.kotlin_2.data.model.GoalItem
+import com.example.kotlin_2.data.model.HistoryItem
+import com.example.kotlin_2.data.repository.GoalRepository
 import java.time.format.DateTimeFormatter
 
 @Composable

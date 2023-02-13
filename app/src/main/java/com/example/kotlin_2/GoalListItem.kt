@@ -23,11 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.kotlin_2.model.GoalItem
-import com.example.kotlin_2.repository.GoalRepository
+import com.example.kotlin_2.data.model.GoalItem
+import com.example.kotlin_2.data.repository.GoalRepository
 
 @Composable
-fun GoalListItem( goalItem : GoalItem, onClick: () -> Unit){
+fun GoalListItem(goalItem : GoalItem, onClick: () -> Unit){
     var color =
         if (goalItem.active){
             Color.Blue

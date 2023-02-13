@@ -30,7 +30,7 @@ import com.example.kotlin_2.GoalListItem
 import com.example.kotlin_2.HistoryListItem
 import com.example.kotlin_2.customComponents.CustomBarChart
 //import com.example.kotlin_2.model.BarChartViewModel
-import com.example.kotlin_2.model.GoalItem
+import com.example.kotlin_2.data.model.GoalItem
 import com.himanshoe.charty.bar.BarChart
 import com.himanshoe.charty.bar.model.BarData
 import kotlinx.coroutines.*
