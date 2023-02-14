@@ -37,12 +37,13 @@ import kotlinx.coroutines.*
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import com.example.kotlin_2.screen.History.HistoryViewModel
+import com.example.kotlin_2.screen.Setting.SettingsViewModel
 
-@Preview
+//@Preview
 @Composable
-fun HistoryScreen(
-){
-    TopAppBar(
+fun HistoryScreen(){
+    /*TopAppBar(
         title = { Text("iWalk") },
         actions = {
             // RowScope here, so these icons will be placed horizontally
@@ -50,7 +51,7 @@ fun HistoryScreen(
                 Icon(Icons.Filled.Settings, contentDescription = "Localized description")
             }
         }
-    )
+    )*/
     //Spacer(Modifier.height(50.dp))
 
     Column(

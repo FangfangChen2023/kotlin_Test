@@ -13,16 +13,21 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.kotlin_2.screen.Goal.GoalViewModel
 import com.example.kotlin_2.screen.GoalScreen
+import com.example.kotlin_2.screen.History.HistoryViewModel
 import com.example.kotlin_2.screen.HistoryScreen
 import com.example.kotlin_2.screen.Home.HomeViewModel
 import com.example.kotlin_2.screen.HomeScreen
+import com.example.kotlin_2.screen.Setting.SettingsScreen
+import com.example.kotlin_2.screen.Setting.SettingsViewModel
 
 
 object ReplyRoute {
     const val HOME = "Home"
     const val HISTORY = "History"
     const val Goal = "Goal"
+    const val SETTINGS = "Settings"
 }
 
 data class ReplyTopLevelDestination(
@@ -54,7 +59,7 @@ class ReplyNavigationActions(private val navController: NavHostController) {
 @Composable
 fun BottomNavGraph(
     navController: NavHostController,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
 ){
     NavHost(
         navController = navController,
@@ -63,8 +68,10 @@ fun BottomNavGraph(
         composable("home"){ HomeScreen(homeViewModel) }
         composable("history"){ HistoryScreen() }
         composable("goal"){ GoalScreen() }
+        composable("settings"){SettingsScreen()}
     }
 }
+
 
 @Composable
 fun BottomNavigationBar(
@@ -98,6 +105,7 @@ fun BottomNavigationBar(
     }
 }
 
+
 val TOP_LEVEL_DESTINATIONS = listOf(
     ReplyTopLevelDestination(
         route = ReplyRoute.HOME,
@@ -116,5 +124,6 @@ val TOP_LEVEL_DESTINATIONS = listOf(
         selectedIcon = R.drawable.baseline_star_rate_24,
         unselectedIcon = R.drawable.baseline_star_rate_24,
         iconText = "Goals"
-    )
+    ),
 )
+

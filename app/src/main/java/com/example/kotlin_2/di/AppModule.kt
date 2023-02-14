@@ -1,5 +1,5 @@
 package com.example.kotlin_2.di
-
+/*
 import android.app.Application
 import androidx.room.Room
 import com.example.kotlin_2.data.KeepFitDatabase
@@ -23,3 +23,4 @@ object AppModule {
         return HistoryRepositoryImpl(db.historyDao)
     }
 }
+*/

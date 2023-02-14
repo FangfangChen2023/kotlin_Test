@@ -31,12 +31,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
+import com.example.kotlin_2.screen.Goal.GoalViewModel
+import com.example.kotlin_2.screen.Setting.SettingsViewModel
 
-@Preview
+//@Preview
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun GoalScreen() {
-    TopAppBar(
+    /*TopAppBar(
         title = { Text("iWalk") },
         actions = {
             // RowScope here, so these icons will be placed horizontally
@@ -44,7 +46,7 @@ fun GoalScreen() {
                 Icon(Icons.Filled.Settings, contentDescription = "Localized description")
             }
         }
-    )
+    )*/
 
 
     Column(

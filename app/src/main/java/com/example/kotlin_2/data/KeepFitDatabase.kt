@@ -1,5 +1,5 @@
 package com.example.kotlin_2.data
-
+/*
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.kotlin_2.data.dao.HistoryDao
@@ -13,4 +13,4 @@ import com.example.kotlin_2.data.model.HistoryItem
 
 abstract class KeepFitDatabase:RoomDatabase() {
     abstract val historyDao: HistoryDao
-}
+}*/

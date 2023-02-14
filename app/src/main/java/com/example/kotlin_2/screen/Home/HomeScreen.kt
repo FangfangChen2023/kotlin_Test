@@ -47,9 +47,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.kotlin_2.R
+import com.example.kotlin_2.ReplyRoute
+import com.example.kotlin_2.ReplyTopLevelDestination
 import com.example.kotlin_2.customComponents.CustomProgressBar
 import com.example.kotlin_2.data.model.HistoryItem
 import com.example.kotlin_2.screen.Home.HomeViewModel
+import com.example.kotlin_2.screen.Setting.SettingsViewModel
 import java.lang.Math.abs
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -68,15 +71,15 @@ fun HomeScreen(homeViewModel:HomeViewModel) {
     })
 
 
-    TopAppBar(
+    /*TopAppBar(
         title = { Text("iWalk") },
         actions = {
             // RowScope here, so these icons will be placed horizontally
-            IconButton(onClick = {}) {
+            IconButton(onClick = {settingsViewModel.navigateOnClick()}) {
                 Icon(Icons.Filled.Settings, contentDescription = "Localized description")
             }
         }
-    )
+    )*/
 
                 Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
                     Spacer(Modifier.height(75.dp))

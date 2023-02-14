@@ -8,9 +8,14 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import com.example.kotlin_2.ui.theme.Kotlin_2Theme
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.navigation.compose.rememberNavController
+import com.example.kotlin_2.screen.Goal.GoalViewModel
+import com.example.kotlin_2.screen.History.HistoryViewModel
 import com.example.kotlin_2.screen.Home.HomeViewModel
+import com.example.kotlin_2.screen.Setting.SettingsViewModel
 
 
 /*test1*/
@@ -19,9 +24,10 @@ class MainActivity : ComponentActivity() {
     val PREFS_DAY = "date"
     val PREFS_GOAL = "goal"
 
-    val homeViewModel:HomeViewModel by viewModels ()
-//    val goalViewModel:GoalViewModel by viewModels ()
-//    val historyViewModel:HistoryViewModel by viewModels ()
+    val homeViewModel: HomeViewModel by viewModels()
+    //val settingsViewModel: SettingsViewModel by viewModels()
+    //val goalViewModel: GoalViewModel by viewModels ()
+    //val historyViewModel: HistoryViewModel by viewModels ()
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +36,17 @@ class MainActivity : ComponentActivity() {
         getSharedPreferences(PREFS_DAY, 0)
         getSharedPreferences(PREFS_GOAL, 0)
         setContent {
+            val navController = rememberNavController()
+            /*Scaffold(
+                    topBar = {
+                        TopNavigationBar(
+                            navController = navController,
+                        )
+                    }
+
+            ) {
+                TopNavGraph(navController = navController, homeViewModel = homeViewModel) //, settingsViewModel = settingsViewModel, goalViewModel = goalViewModel, historyViewModel = historyViewModel)
+            }*/
             Kotlin_2Theme {
                 // A surface container using the 'background' color from the theme
                 //val context = this
@@ -42,25 +59,43 @@ class MainActivity : ComponentActivity() {
                 //db.insertGoal(testGoal)
                 //db.insertGoal(defaultGoal)
 
-                val navController = rememberNavController()
-                Scaffold(
-                    bottomBar = {
-                        BottomNavigationBar(
-                            items = TOP_LEVEL_DESTINATIONS,
-                            navController = navController,
-                            onItemClick = {
-                                navController.navigate(it.route)
+            }
+            //val navController = rememberNavController()
+            val settingsRoute = ReplyTopLevelDestination(
+                route = ReplyRoute.SETTINGS,
+                selectedIcon = R.drawable.baseline_home_24,
+                unselectedIcon = R.drawable.baseline_home_24,
+                iconText = "Settings"
+            )
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("iWalk") },
+                        actions = {
+                            // RowScope here, so these icons will be placed horizontally
+                            IconButton(onClick = { navController.navigate(settingsRoute.route) }) {
+                                Icon(Icons.Filled.Settings, contentDescription = "Localized description")
                             }
-                        )
-                    }
-                ) {
-                    BottomNavGraph(navController = navController, homeViewModel = homeViewModel)
+                        }
+                    )
+                },
+                bottomBar = {
+                    BottomNavigationBar(
+                        items = TOP_LEVEL_DESTINATIONS,
+                        navController = navController,
+                        onItemClick = {
+                            navController.navigate(it.route)
+                        }
+                    )
                 }
+            ) {
+                BottomNavGraph(navController = navController, homeViewModel = homeViewModel)
             }
         }
-
     }
+
 }
+
 
 
 
