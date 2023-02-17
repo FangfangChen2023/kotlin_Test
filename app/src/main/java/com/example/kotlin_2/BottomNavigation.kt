@@ -13,6 +13,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.kotlin_2.data.dao.GoalDao
+//import com.example.kotlin_2.data.dao.HistoryDao
 import com.example.kotlin_2.screen.Goal.GoalViewModel
 import com.example.kotlin_2.screen.GoalScreen
 import com.example.kotlin_2.screen.History.HistoryViewModel
@@ -60,6 +62,7 @@ class ReplyNavigationActions(private val navController: NavHostController) {
 fun BottomNavGraph(
     navController: NavHostController,
     homeViewModel: HomeViewModel,
+    goalViewModel: GoalViewModel,
 ){
     NavHost(
         navController = navController,
@@ -67,7 +70,7 @@ fun BottomNavGraph(
     ){
         composable("home"){ HomeScreen(homeViewModel) }
         composable("history"){ HistoryScreen() }
-        composable("goal"){ GoalScreen() }
+        composable("goal"){ GoalScreen(goalViewModel) }
         composable("settings"){SettingsScreen()}
     }
 }

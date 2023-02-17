@@ -1,5 +1,5 @@
 package com.example.kotlin_2.data.repository
-
+/*
 import com.example.kotlin_2.data.dao.HistoryDao
 import com.example.kotlin_2.data.model.HistoryItem
 import kotlinx.coroutines.flow.Flow
@@ -22,4 +22,4 @@ class HistoryRepositoryImpl(
     override fun getHistory(): Flow<List<HistoryItem>> {
         return dao.getHistory()
     }
-}
+}*/

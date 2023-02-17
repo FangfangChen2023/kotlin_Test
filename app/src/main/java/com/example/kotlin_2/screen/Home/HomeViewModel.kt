@@ -1,10 +1,11 @@
 package com.example.kotlin_2.screen.Home
 
-import DataBaseHandler
+//import DataBaseHandler
 import android.app.Application
 import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.kotlin_2.data.model.HistoryItem
@@ -32,7 +33,7 @@ class HomeViewModel(application: Application) :AndroidViewModel(application) {
         editor.putInt("currentSteps", steps + stepsInput)
         editor.commit()
 
-        var currentDate = LocalDateTime.now()
+        /*var currentDate = LocalDateTime.now()
         val oldDate = datePref.getString("date", null)
         var dateMemorised: LocalDateTime? = null
         if (oldDate != null) {
@@ -72,7 +73,7 @@ class HomeViewModel(application: Application) :AndroidViewModel(application) {
             //Toast.makeText(context, "something happened at least,$history, $histories", Toast.LENGTH_SHORT).show()
         }
         editorDay.putString("date", currentDate.toString());
-        editorDay.commit()
+        editorDay.commit()*/
 
         //var date = datePref.getString("date", null)
         //var curdate = currentDate.toString()

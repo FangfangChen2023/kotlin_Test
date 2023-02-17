@@ -1,6 +1,6 @@
 package com.example.kotlin_2.screen
 
-import DataBaseHandler
+//import DataBaseHandler
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences

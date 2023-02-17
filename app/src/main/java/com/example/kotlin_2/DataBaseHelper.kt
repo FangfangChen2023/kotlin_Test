@@ -1,4 +1,4 @@
-import android.annotation.SuppressLint
+/*import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -163,4 +163,4 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         query = "DROP TABLE $TABLENAME_HISTORY"
         db.execSQL(query)
     }
-}
+}*/

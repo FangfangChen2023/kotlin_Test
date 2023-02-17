@@ -26,6 +26,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
+import com.example.kotlin_2.data.AppDatabase
 
 
 /*test1*/
@@ -36,7 +40,11 @@ class MainActivity : ComponentActivity() {
 
     val homeViewModel: HomeViewModel by viewModels()
     //val settingsViewModel: SettingsViewModel by viewModels()
-    //val goalViewModel: GoalViewModel by viewModels ()
+    /*viewModal = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        ).get(NoteViewModal::class.java)*/
+    //val goalViewModel: GoalViewModel() by viewModels ()
     //val historyViewModel: HistoryViewModel by viewModels ()
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -69,7 +77,6 @@ class MainActivity : ComponentActivity() {
                 //val testGoal = GoalItem("test", 3000, false)
                 //db.insertGoal(testGoal)
                 //db.insertGoal(defaultGoal)
-
             }
             //val navController = rememberNavController()
             val settingsRoute = ReplyTopLevelDestination(
@@ -78,6 +85,10 @@ class MainActivity : ComponentActivity() {
                 unselectedIcon = R.drawable.baseline_home_24,
                 iconText = "Settings"
             )
+            //val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "keepFit.db").build()
+            //val goalDao = db.goalDao()
+            //val historyDao = db.historyDao()
+            val goalViewModel = ViewModelProvider(this).get(GoalViewModel::class.java)
             Scaffold(
                 topBar = {
                     TopAppBar(
@@ -103,7 +114,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             ) {
-                BottomNavGraph(navController = navController, homeViewModel = homeViewModel)
+                BottomNavGraph(navController = navController, homeViewModel = homeViewModel, goalViewModel = goalViewModel)
             }
         }
     }

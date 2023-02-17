@@ -1,6 +1,6 @@
 package com.example.kotlin_2.screen
 
-import DataBaseHandler
+//import DataBaseHandler
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
@@ -31,13 +31,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.lifecycle.Observer
 import com.example.kotlin_2.screen.Goal.GoalViewModel
 import com.example.kotlin_2.screen.Setting.SettingsViewModel
 
 //@Preview
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun GoalScreen() {
+fun GoalScreen(goalViewModel:GoalViewModel) {
     /*TopAppBar(
         title = { Text("iWalk") },
         actions = {
@@ -60,10 +61,16 @@ fun GoalScreen() {
         //var goalRepository by remember {mutableStateOf(GoalRepository())}
         //var allGoals by remember {mutableStateOf(goalRepository.getAllGoals())}
         val context = LocalContext.current
-        val db by remember { mutableStateOf(DataBaseHandler(context)) }
+        //val db by remember { mutableStateOf(DataBaseHandler(context)) }
         //var allGoals = db.readGoals()
-        var allGoals by remember { mutableStateOf(db.readGoals()) }
-
+        //var allGoals by remember { mutableStateOf(db.readGoals()) }
+        /*homeViewModel.currentSteps.observeForever(Observer {
+            steps = it
+    })*/
+        var allGoals: List<GoalItem> = emptyList()
+        goalViewModel.goals.observeForever {
+            allGoals = it
+        }
         val sharedPreferenceGoal =  context.getSharedPreferences("goal", Context.MODE_PRIVATE)
         val editorGoal = sharedPreferenceGoal.edit()
 
@@ -77,26 +84,27 @@ fun GoalScreen() {
                                                  goalItem ->
                     Log.d("goal", index.toString())
                     GoalListItem(goalItem = goalItem,
-                        onClick = {
+                        onClick = {goalViewModel.onClickOnGoal()}
+                        /*onClick = {
                             db.updateGoals(goalItem)
                             allGoals = db.readGoals()
                             editorGoal.putString("goal", goalItem.name);
                             editorGoal.commit();
-                        }
+                        }*/
                     )
-                    if (!goalItem.active) {
+                    /*if (!goalItem.active) {
                         Button( onClick = {
                             db.deleteGoal(goalItem);
                             allGoals = db.readGoals()
                         }) {
                             Text(text = "X", style = TextStyle(fontSize = 16.sp))
                         }
-                    }
+                    }*/
                 }
         }
         var stepsInput by remember { mutableStateOf(0) }
         var nameInput by remember { mutableStateOf("...") }
-        var newGoal = GoalItem("new", 0, false)
+        //var newGoal = GoalItem("new", 0, false)
         val focusManager = LocalFocusManager.current
         Spacer(Modifier.height(20.dp))
         OutlinedTextField(
@@ -155,10 +163,11 @@ fun GoalScreen() {
                 onDone = {
                     //steps += stepsInput
                     //var steps = sharedPreference.getInt("currentSteps", 0)
-                    newGoal.name = nameInput
+                    /*newGoal.name = nameInput
                     newGoal.steps = stepsInput
                     db.insertGoal(newGoal)
-                    allGoals = db.readGoals()
+                    allGoals = db.readGoals()*/
+                    goalViewModel.onAddGoal(stepsInput, nameInput)
                     focusManager.clearFocus()
                     nameInput = "..."
                     stepsInput = 0;

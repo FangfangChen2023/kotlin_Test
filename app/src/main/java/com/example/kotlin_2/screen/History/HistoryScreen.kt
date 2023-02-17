@@ -1,6 +1,7 @@
 package com.example.kotlin_2.screen
 
-import DataBaseHandler
+//import DataBaseHandler
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.util.Log
@@ -27,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kotlin_2.GoalListItem
-import com.example.kotlin_2.HistoryListItem
+//import com.example.kotlin_2.HistoryListItem
 import com.example.kotlin_2.customComponents.CustomBarChart
 //import com.example.kotlin_2.model.BarChartViewModel
 import com.example.kotlin_2.data.model.GoalItem
@@ -42,6 +43,7 @@ import com.example.kotlin_2.screen.Setting.SettingsViewModel
 
 //@Preview
 @Composable
+@SuppressLint("UnrememberedMutableState")
 fun HistoryScreen(){
     /*TopAppBar(
         title = { Text("iWalk") },
@@ -54,7 +56,7 @@ fun HistoryScreen(){
     )*/
     //Spacer(Modifier.height(50.dp))
 
-    Column(
+    /*Column(
         modifier = Modifier
             .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -82,7 +84,7 @@ fun HistoryScreen(){
             }
         }
 
-    }
+    }*/
 /*
     Column (Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

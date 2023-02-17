@@ -1,7 +1,7 @@
 package com.example.kotlin_2.customComponents
 
 import kotlin.math.roundToInt
-import DataBaseHandler
+//import DataBaseHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateValueAsState
@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.core.os.persistableBundleOf
+import com.example.kotlin_2.data.model.GoalItem
 import com.example.kotlin_2.data.repository.GoalRepository
 import com.example.kotlin_2.screen.HomeScreen
 
@@ -56,8 +57,9 @@ fun CustomProgressBar(
 
     ) {
     val context = LocalContext.current
-    val db = DataBaseHandler(context)
-    var activeGoal by remember {mutableStateOf(db.getActiveGoal())}
+    var activeGoal = GoalItem("test", 5000, true)
+    /*val db = DataBaseHandler(context)
+    var activeGoal by remember {mutableStateOf(db.getActiveGoal())}*/
     var stepGoal by remember { mutableStateOf(activeGoal.steps)}
     var maxIndicatorValue by remember { mutableStateOf(stepGoal)}
     var allowedMaxIndicatorValue by remember {
