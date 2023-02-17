@@ -6,8 +6,19 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Switch
+import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -61,7 +72,6 @@ import java.time.LocalTime
 fun SettingsScreen() {
 
 
-
     /*TopAppBar(
         title = { Text("iWalk") },
         actions = {
@@ -74,18 +84,58 @@ fun SettingsScreen() {
 
 
     Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(Modifier.height(75.dp))
+        Spacer(Modifier.height(15.dp))
         Text(
             text = "Settings",
-            fontSize = MaterialTheme.typography.h4.fontSize,
-            fontWeight = FontWeight.Bold
+            fontSize = MaterialTheme.typography.h3.fontSize,
+            fontWeight = FontWeight.Bold,
         )
-        Spacer(Modifier.height(30.dp))
-
-
-
-
-
-
     }
-}
+
+        val option1Enabled = remember { mutableStateOf(false) }
+        val option2Enabled = remember { mutableStateOf(true) }
+        val option3Enabled = remember { mutableStateOf(false) }
+
+        Column(modifier = Modifier.padding(16.dp)) {
+            Spacer(Modifier.height(120.dp))
+            LazyColumn {
+                item {
+                    Text("Active Goals",
+                        fontSize = MaterialTheme.typography.h6.fontSize,
+                        fontWeight = FontWeight.Bold)
+                    Switch(
+                        checked = option1Enabled.value,
+                        onCheckedChange = { option1Enabled.value = it }
+                    )
+                }
+                item {
+                    Text("Normal Activity Recording",
+                        fontSize = MaterialTheme.typography.h6.fontSize,
+                        fontWeight = FontWeight.Bold)
+                    Switch(
+                        checked = option2Enabled.value,
+                        onCheckedChange = { checked ->
+                            option2Enabled.value = checked
+                            if (checked) {
+                                option3Enabled.value = false
+                            }
+                        }
+                    )
+                }
+                item {
+                    Text("Historical Activity Recording",
+                        fontSize = MaterialTheme.typography.h6.fontSize,
+                        fontWeight = FontWeight.Bold)
+                    Switch(
+                        checked = option3Enabled.value,
+                        onCheckedChange = { checked ->
+                            option3Enabled.value = checked
+                            if (checked) {
+                                option2Enabled.value = false
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    }
