@@ -15,7 +15,17 @@ import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_2.screen.Goal.GoalViewModel
 import com.example.kotlin_2.screen.History.HistoryViewModel
 import com.example.kotlin_2.screen.Home.HomeViewModel
+import com.example.kotlin_2.screen.Setting.SettingsScreen
 import com.example.kotlin_2.screen.Setting.SettingsViewModel
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Switch
+import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 
 
 /*test1*/
@@ -36,6 +46,7 @@ class MainActivity : ComponentActivity() {
         getSharedPreferences(PREFS_DAY, 0)
         getSharedPreferences(PREFS_GOAL, 0)
         setContent {
+            SettingsScreen()
             val navController = rememberNavController()
             /*Scaffold(
                     topBar = {
@@ -74,7 +85,10 @@ class MainActivity : ComponentActivity() {
                         actions = {
                             // RowScope here, so these icons will be placed horizontally
                             IconButton(onClick = { navController.navigate(settingsRoute.route) }) {
-                                Icon(Icons.Filled.Settings, contentDescription = "Localized description")
+                                Icon(
+                                    Icons.Filled.Settings,
+                                    contentDescription = "Localized description",
+                                )
                             }
                         }
                     )
