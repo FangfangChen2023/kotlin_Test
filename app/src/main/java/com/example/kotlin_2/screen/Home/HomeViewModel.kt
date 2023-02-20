@@ -1,37 +1,64 @@
 package com.example.kotlin_2.screen.Home
 
-//import DataBaseHandler
-import android.app.Application
-import android.content.Context
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.kotlin_2.data.model.HistoryItem
+
+import android.util.Log
+import androidx.lifecycle.*
+import com.example.kotlin_2.data.model.DailyStatus
+import com.example.kotlin_2.data.repository.DailyRepository
+import com.example.kotlin_2.data.repository.DailyRepositoryImpl
+import com.example.kotlin_2.data.repository.GoalRepository
+import com.example.kotlin_2.data.repository.GoalRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class HomeViewModel(application: Application) :AndroidViewModel(application) {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val dailyRepository: DailyRepository,
+    private  val goalRepository: GoalRepository
 
-    var currentStepsPref = application.getSharedPreferences("currentSteps", Application.MODE_PRIVATE)
-    var datePref = application.getSharedPreferences("date",Application.MODE_PRIVATE)
-    var goalPref = application.getSharedPreferences("goal",Application.MODE_PRIVATE)
+) : ViewModel() {
 
-    val editor = currentStepsPref.edit()
-    val editorDay = datePref.edit()
-    val editorGoal = goalPref.edit()
+    var dailyDB: DailyStatus? = null
+    var isDailyNotNull = MutableLiveData(false)
 
-    private val _currentSteps= MutableLiveData(currentStepsPref.getInt("currentSteps", 0))
-    val currentSteps:LiveData<Int> = _currentSteps
-    var steps = currentStepsPref.getInt("currentSteps", 0)
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            dailyDB = dailyRepository.getDaily()
+            if (dailyDB == null) {
+                isDailyNotNull.postValue(true)
+            }
+//            this@HomeViewModel.dailyDate = dailyRepository.getDaily()!!.todayDate
+        }
+    }
+
+//    var currentStepsPref = application.getSharedPreferences("currentSteps", Application.MODE_PRIVATE)
+//    var datePref = application.getSharedPreferences("date",Application.MODE_PRIVATE)
+//    var goalPref = application.getSharedPreferences("goal",Application.MODE_PRIVATE)
+
+//    val editor = currentStepsPref.edit()
+//    val editorDay = datePref.edit()
+//    val editorGoal = goalPref.edit()
+
+    private val _currentSteps = MutableLiveData( if(dailyDB!=null) dailyDB!!.currentSteps else 0)
+    val currentSteps: LiveData<Int> = _currentSteps
+    var steps = if(dailyDB!=null) dailyDB!!.currentSteps else 0
+
 
     fun keyboardAction(
-        application: Application = Application(),
         stepsInput: Int = 0
-    ){
-        _currentSteps.value = steps + stepsInput
-        editor.putInt("currentSteps", steps + stepsInput)
-        editor.commit()
+    ) {
+        _currentSteps.postValue(steps + stepsInput)
+        if(dailyDB!=null) {
+            dailyDB!!.currentSteps = steps + stepsInput
+            viewModelScope.launch(Dispatchers.IO) {
+                //update the new steps into database daily status table
+                dailyRepository.updateDaily(dailyDB!!)
+            }
+        }
+
 
         /*var currentDate = LocalDateTime.now()
         val oldDate = datePref.getString("date", null)
@@ -79,7 +106,6 @@ class HomeViewModel(application: Application) :AndroidViewModel(application) {
         //var curdate = currentDate.toString()
         //Toast.makeText(context, "commited current date, $curdate, $date", Toast.LENGTH_SHORT).show()
     }
-
 
 
 }

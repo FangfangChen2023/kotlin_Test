@@ -29,11 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.kotlin_2.GoalListItem
 //import com.example.kotlin_2.HistoryListItem
-import com.example.kotlin_2.customComponents.CustomBarChart
-//import com.example.kotlin_2.model.BarChartViewModel
 import com.example.kotlin_2.data.model.GoalItem
-import com.himanshoe.charty.bar.BarChart
-import com.himanshoe.charty.bar.model.BarData
 import kotlinx.coroutines.*
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text

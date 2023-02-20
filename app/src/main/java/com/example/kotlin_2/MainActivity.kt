@@ -30,22 +30,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.example.kotlin_2.data.AppDatabase
+import dagger.hilt.android.AndroidEntryPoint
 
 
-/*test1*/
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     val PREFS_NAME = "currentSteps"
     val PREFS_DAY = "date"
     val PREFS_GOAL = "goal"
 
     val homeViewModel: HomeViewModel by viewModels()
+    val goalViewModel: GoalViewModel by viewModels ()
+    //val historyViewModel: HistoryViewModel by viewModels ()
+
     //val settingsViewModel: SettingsViewModel by viewModels()
     /*viewModal = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         ).get(NoteViewModal::class.java)*/
-    //val goalViewModel: GoalViewModel() by viewModels ()
-    //val historyViewModel: HistoryViewModel by viewModels ()
+
+
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +92,7 @@ class MainActivity : ComponentActivity() {
             //val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "keepFit.db").build()
             //val goalDao = db.goalDao()
             //val historyDao = db.historyDao()
-            val goalViewModel = ViewModelProvider(this).get(GoalViewModel::class.java)
+//            val goalViewModel = ViewModelProvider(this).get(GoalViewModel::class.java)
             Scaffold(
                 topBar = {
                     TopAppBar(

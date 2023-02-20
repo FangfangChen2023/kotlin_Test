@@ -4,7 +4,6 @@ import kotlin.math.roundToInt
 //import DataBaseHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateValueAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -22,15 +21,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.core.os.persistableBundleOf
 import com.example.kotlin_2.data.model.GoalItem
-import com.example.kotlin_2.data.repository.GoalRepository
-import com.example.kotlin_2.screen.HomeScreen
 
 /*var goalRepository by mutableStateOf(GoalRepository())
 var activeGoal by mutableStateOf(goalRepository.getActiveGoal())

@@ -67,7 +67,7 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
         /*homeViewModel.currentSteps.observeForever(Observer {
             steps = it
     })*/
-        var allGoals: List<GoalItem> = emptyList()
+        var allGoals: List<GoalItem> by remember { mutableStateOf( emptyList()) }
         goalViewModel.goals.observeForever {
             allGoals = it
         }
@@ -109,7 +109,7 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
         Spacer(Modifier.height(20.dp))
         OutlinedTextField(
             modifier = Modifier
-                .background(androidx.compose.ui.graphics.Color.Transparent),
+                .background(Color.Transparent),
 
             value = stepsInput.toString(),
             onValueChange = {
@@ -123,8 +123,8 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
             label = { Text(text = "Add Steps for New Goal") },
             placeholder = { Text(text = "") },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = androidx.compose.ui.graphics.Color.Blue,
-                unfocusedBorderColor = androidx.compose.ui.graphics.Color.Blue
+                focusedBorderColor = Color.Blue,
+                unfocusedBorderColor = Color.Blue
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
@@ -138,7 +138,7 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
 
         OutlinedTextField(
             modifier = Modifier
-                .background(androidx.compose.ui.graphics.Color.Transparent),
+                .background(Color.Transparent),
 
             value = nameInput,
             onValueChange = {
@@ -152,8 +152,8 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
             label = { Text(text = "Add Name for New Goal") },
             placeholder = { Text(text = "") },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = androidx.compose.ui.graphics.Color.Blue,
-                unfocusedBorderColor = androidx.compose.ui.graphics.Color.Blue
+                focusedBorderColor = Color.Blue,
+                unfocusedBorderColor = Color.Blue
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,

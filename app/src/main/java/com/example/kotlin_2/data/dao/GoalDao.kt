@@ -18,6 +18,6 @@ interface GoalDao {
     @Update
     fun updateGoals(goals: List<GoalItem>): Int
 
-    @Delete()
+    @Delete
     fun deleteGoal(goalItem: GoalItem)
 }
