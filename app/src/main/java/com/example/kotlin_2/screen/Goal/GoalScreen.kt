@@ -32,13 +32,16 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.lifecycle.Observer
+import com.example.kotlin_2.data.model.DailyStatus
 import com.example.kotlin_2.screen.Goal.GoalViewModel
+import com.example.kotlin_2.screen.Home.HomeViewModel
 import com.example.kotlin_2.screen.Setting.SettingsViewModel
+import java.time.LocalDate
 
 //@Preview
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun GoalScreen(goalViewModel:GoalViewModel) {
+fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
     /*TopAppBar(
         title = { Text("iWalk") },
         actions = {
@@ -60,7 +63,7 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
 
         //var goalRepository by remember {mutableStateOf(GoalRepository())}
         //var allGoals by remember {mutableStateOf(goalRepository.getAllGoals())}
-        val context = LocalContext.current
+        //val context = LocalContext.current
         //val db by remember { mutableStateOf(DataBaseHandler(context)) }
         //var allGoals = db.readGoals()
         //var allGoals by remember { mutableStateOf(db.readGoals()) }
@@ -71,8 +74,12 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
         goalViewModel.goals.observeForever {
             allGoals = it
         }
-        val sharedPreferenceGoal =  context.getSharedPreferences("goal", Context.MODE_PRIVATE)
-        val editorGoal = sharedPreferenceGoal.edit()
+        var current: DailyStatus by remember { mutableStateOf(DailyStatus(currentSteps = 0, todayDate = LocalDate.now().toString(), goalName ="default", goalSteps = 5000)) }
+        homeViewModel.dailyDB.observeForever {
+            current = it
+        }
+        //val sharedPreferenceGoal =  context.getSharedPreferences("goal", Context.MODE_PRIVATE)
+        //val editorGoal = sharedPreferenceGoal.edit()
 
         LazyColumn(
             modifier = Modifier
@@ -84,7 +91,7 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
                                                  goalItem ->
                     Log.d("goal", index.toString())
                     GoalListItem(goalItem = goalItem,
-                        onClick = {goalViewModel.onClickOnGoal()}
+                        onClick = {goalViewModel.onClickOnGoal(goalItem, current, homeViewModel)}
                         /*onClick = {
                             db.updateGoals(goalItem)
                             allGoals = db.readGoals()
@@ -92,14 +99,14 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
                             editorGoal.commit();
                         }*/
                     )
-                    /*if (!goalItem.active) {
-                        Button( onClick = {
-                            db.deleteGoal(goalItem);
-                            allGoals = db.readGoals()
+                    if (!goalItem.active) {
+                        /*TODO change this into prettier button*/
+                        Button( onClick = {goalViewModel.onDeleteGoal(goalItem)
                         }) {
                             Text(text = "X", style = TextStyle(fontSize = 16.sp))
                         }
-                    }*/
+                        /* TODO make goal editable  depending on preferences*/
+                    }
                 }
         }
         var stepsInput by remember { mutableStateOf(0) }
@@ -120,6 +127,7 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
                 }
 
             },
+            /*TODO this should be a separate dialog and test for errors -> name has to be unique, steps too?, no emojis or numbers as names, also 0 steps does not make sense*/
             label = { Text(text = "Add Steps for New Goal") },
             placeholder = { Text(text = "") },
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -167,7 +175,7 @@ fun GoalScreen(goalViewModel:GoalViewModel) {
                     newGoal.steps = stepsInput
                     db.insertGoal(newGoal)
                     allGoals = db.readGoals()*/
-                    goalViewModel.onAddGoal(stepsInput, nameInput)
+                    goalViewModel.onAddGoal(stepsInput, nameInput, homeViewModel)
                     focusManager.clearFocus()
                     nameInput = "..."
                     stepsInput = 0;

@@ -2,6 +2,8 @@ package com.example.kotlin_2.screen.Setting
 
 import android.app.Application
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +20,9 @@ import java.time.LocalDateTime
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
+    fun historicalActivityRecording(){
+
+    }
 
 
         //var date = datePref.getString("date", null)

@@ -16,6 +16,10 @@ class GoalRepositoryImpl (
         goalDao.deleteGoal(goalItem)
     }
 
+    override suspend fun updateGoal(goalItem: GoalItem){
+        goalDao.updateGoal(goalItem)
+    }
+
     override suspend fun getGoal(id: Int): GoalItem? {
         TODO("Not yet implemented")
     }
@@ -25,21 +29,17 @@ class GoalRepositoryImpl (
     }
 
     override suspend fun getActiveGoal(): GoalItem? {
-//        val allGoals = getAllGoals()
-//        for (goal in allGoals){
-//            if (goal.active){
-//                return goal
-//            }
-//        }
-//        return allGoals[0]
-        return null
+        return goalDao.getActiveGoal()
     }
 
-    override suspend fun setActiveGoal(item: GoalItem) {
-//        val allGoals = getAllGoals()
-//        for (goal in allGoals){
-//            goal.active = goal == item
-//        }
+    override suspend fun setActiveGoal(goalItem: GoalItem) {
+        goalItem.active = true
+        val activeGoal = goalDao.getActiveGoal()
+        updateGoal(goalItem)
+        if (activeGoal != null && activeGoal != goalItem) {
+            activeGoal.active = false
+            updateGoal(activeGoal)
+        }
 
     }
 

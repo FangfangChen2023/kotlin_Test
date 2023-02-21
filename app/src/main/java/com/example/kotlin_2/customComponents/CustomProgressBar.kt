@@ -24,7 +24,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Observer
+import com.example.kotlin_2.data.model.DailyStatus
 import com.example.kotlin_2.data.model.GoalItem
+import com.example.kotlin_2.screen.Goal.GoalViewModel
+import com.example.kotlin_2.screen.Home.HomeViewModel
+import java.time.LocalDate
 
 /*var goalRepository by mutableStateOf(GoalRepository())
 var activeGoal by mutableStateOf(goalRepository.getActiveGoal())
@@ -33,7 +38,7 @@ var stepGoal by mutableStateOf(activeGoal?.steps)*/
 
 @Composable
 fun CustomProgressBar(
-
+    currentDaily: DailyStatus,
     canvasSize: Dp = 333.dp,
     indicatorValue: Int = 0,
     backgroundIndicatorColor: Color = Color.Gray.copy(alpha = 0.1f),
@@ -41,7 +46,7 @@ fun CustomProgressBar(
     //foregroundIndicatorColor: Color = Color.Magenta,
     foregroundIndicatorStrokeWidth: Float = 50f,
 
-    //smallText: String = "Goal: " + (activeGoal.name),
+    //smallText: String = "Goal: default",
     smallTextColor: Color = Color.Gray.copy(alpha = 0.6f),
     smallText2Color: Color = Color.Gray.copy(alpha = 0.6f),
     stepsInfoColor: Color = Color.Black,
@@ -50,11 +55,16 @@ fun CustomProgressBar(
     stepsInfoFontSize: TextUnit = MaterialTheme.typography.h4.fontSize,
 
     ) {
-    val context = LocalContext.current
-    var activeGoal = GoalItem("test", 5000, true)
+
+    //var currentDaily = homeViewModel.dailyDB.value
+    var stepGoal by remember { mutableStateOf(currentDaily.goalSteps)}
+    var currentGoalName by remember { mutableStateOf(currentDaily.goalName)}
+
+    //val context = LocalContext.current
+    //var activeGoal = GoalItem("test", 5000, true)
     /*val db = DataBaseHandler(context)
     var activeGoal by remember {mutableStateOf(db.getActiveGoal())}*/
-    var stepGoal by remember { mutableStateOf(activeGoal.steps)}
+    //var stepGoal by remember { mutableStateOf(activeGoal.steps)}
     var maxIndicatorValue by remember { mutableStateOf(stepGoal)}
     var allowedMaxIndicatorValue by remember {
         mutableStateOf(maxIndicatorValue)
@@ -66,7 +76,7 @@ fun CustomProgressBar(
         maxIndicatorValue
     }
 
-    var smallText: String = "Goal: " + (activeGoal.name)
+    var smallText: String = "Goal: " + (currentGoalName)
 
 
     var animatedIndicatorValue by remember { mutableStateOf(0f) }

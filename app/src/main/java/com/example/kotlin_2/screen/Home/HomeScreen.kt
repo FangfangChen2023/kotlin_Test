@@ -22,6 +22,8 @@ import androidx.compose.material.Text
 
 import androidx.lifecycle.Observer
 import com.example.kotlin_2.customComponents.CustomProgressBar
+import com.example.kotlin_2.data.model.DailyStatus
+import com.example.kotlin_2.screen.Goal.GoalViewModel
 import com.example.kotlin_2.screen.Home.HomeViewModel
 import com.example.kotlin_2.screen.Setting.SettingsViewModel
 import java.lang.Math.abs
@@ -36,14 +38,25 @@ fun HomeScreen(homeViewModel:HomeViewModel) {
     var steps by remember { mutableStateOf(0) }
     var stepsInput by remember { mutableStateOf(0) }
     val focusManager = LocalFocusManager.current
-    var inputEnabled   by remember { mutableStateOf(false) }
-
-    homeViewModel.currentSteps.observeForever(Observer {
-            steps = it
-    })
+    var inputEnabled   by remember { mutableStateOf(true) }
+    /*var allGoals: List<GoalItem> by remember { mutableStateOf( emptyList()) }
+        goalViewModel.goals.observeForever {
+            allGoals = it
+        }*/
+    var currentDaily: DailyStatus by remember {mutableStateOf (DailyStatus(currentSteps = 0, todayDate = LocalDate.now().toString(), goalName ="test", goalSteps = 5000)
+    ) }
+    //TODO on restart of the app it always first displays the default goal, then when you switch between tabs it displays the currently active goal?
+    homeViewModel.dailyDB.observeForever {
+        currentDaily = it
+    }
+    /*var allGoals: List<GoalItem> by remember { mutableStateOf( emptyList()) }
+        goalViewModel.goals.observeForever {
+            allGoals = it
+        }*/
+    /*
     homeViewModel.isDailyNotNull.observeForever(Observer {
         inputEnabled = it
-    })
+    })*/
 
 
     /*TopAppBar(
@@ -66,7 +79,9 @@ fun HomeScreen(homeViewModel:HomeViewModel) {
                     Spacer(Modifier.height(30.dp))
 
                     CustomProgressBar(
-                        indicatorValue = steps
+                        indicatorValue = currentDaily.currentSteps,
+                        //smallText = "default",
+                        currentDaily = currentDaily
                     )
 
                     Spacer(Modifier.height(30.dp))
@@ -99,7 +114,7 @@ fun HomeScreen(homeViewModel:HomeViewModel) {
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                 homeViewModel.keyboardAction(stepsInput = stepsInput)
+                                homeViewModel.keyboardAction(stepsInput = stepsInput, currentDaily = currentDaily)
 
                                 stepsInput = 0;
                                 focusManager.clearFocus()

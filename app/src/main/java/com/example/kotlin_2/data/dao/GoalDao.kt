@@ -9,6 +9,9 @@ interface GoalDao {
     @Query("SELECT * FROM GoalItem")
     fun readGoals(): LiveData<List<GoalItem>>
 
+    @Query("SELECT * FROM GoalItem WHERE active = 1")
+    fun getActiveGoal(): GoalItem
+
     @Insert()
     fun insertGoal(goalItem: GoalItem)
 
@@ -20,4 +23,6 @@ interface GoalDao {
 
     @Delete
     fun deleteGoal(goalItem: GoalItem)
+
+
 }

@@ -16,4 +16,6 @@ interface GoalRepository {
     suspend fun getActiveGoal(): GoalItem?
 
     suspend fun setActiveGoal(item: GoalItem)
+
+    suspend fun updateGoal(goalItem: GoalItem)
 }

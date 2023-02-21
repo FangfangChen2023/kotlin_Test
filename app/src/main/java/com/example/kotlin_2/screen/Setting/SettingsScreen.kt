@@ -69,7 +69,7 @@ import java.time.LocalTime
 
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(settingsViewModel: SettingsViewModel) {
 
 
     /*TopAppBar(
@@ -96,11 +96,13 @@ fun SettingsScreen() {
         val option2Enabled = remember { mutableStateOf(true) }
         val option3Enabled = remember { mutableStateOf(false) }
 
+        //TODO we have to refactor this to use ViewModel (no data should be stored here) also use SharedPreferences to save the Settings so that they can be accessed in the rest of the app
+
         Column(modifier = Modifier.padding(16.dp)) {
             Spacer(Modifier.height(120.dp))
             LazyColumn {
                 item {
-                    Text("Active Goals",
+                    Text("Editable Goals",
                         fontSize = MaterialTheme.typography.h6.fontSize,
                         fontWeight = FontWeight.Bold)
                     Switch(
