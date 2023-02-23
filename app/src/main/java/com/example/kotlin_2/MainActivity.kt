@@ -13,23 +13,10 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.navigation.compose.rememberNavController
 import com.example.kotlin_2.screen.Goal.GoalViewModel
-import com.example.kotlin_2.screen.History.HistoryViewModel
 import com.example.kotlin_2.screen.Home.HomeViewModel
 import com.example.kotlin_2.screen.Setting.SettingsScreen
-import com.example.kotlin_2.screen.Setting.SettingsViewModel
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Switch
 import androidx.compose.material.Text
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
-import com.example.kotlin_2.data.AppDatabase
+import com.example.kotlin_2.screen.Setting.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -41,6 +28,7 @@ class MainActivity : ComponentActivity() {
 
     val homeViewModel: HomeViewModel by viewModels()
     val goalViewModel: GoalViewModel by viewModels ()
+    val settingsViewModel: SettingsViewModel by viewModels()
     //val historyViewModel: HistoryViewModel by viewModels ()
 
     //val settingsViewModel: SettingsViewModel by viewModels()
@@ -58,7 +46,7 @@ class MainActivity : ComponentActivity() {
         getSharedPreferences(PREFS_DAY, 0)
         getSharedPreferences(PREFS_GOAL, 0)
         setContent {
-            SettingsScreen()
+            SettingsScreen(settingsViewModel)
             val navController = rememberNavController()
             /*Scaffold(
                     topBar = {
@@ -118,7 +106,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             ) {
-                BottomNavGraph(navController = navController, homeViewModel = homeViewModel, goalViewModel = goalViewModel)
+                BottomNavGraph(navController = navController, homeViewModel = homeViewModel, goalViewModel = goalViewModel, settingsViewModel = settingsViewModel)
             }
         }
     }

@@ -8,16 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.kotlin_2.data.dao.GoalDao
 //import com.example.kotlin_2.data.dao.HistoryDao
 import com.example.kotlin_2.screen.Goal.GoalViewModel
 import com.example.kotlin_2.screen.GoalScreen
-import com.example.kotlin_2.screen.History.HistoryViewModel
 import com.example.kotlin_2.screen.HistoryScreen
 import com.example.kotlin_2.screen.Home.HomeViewModel
 import com.example.kotlin_2.screen.HomeScreen
@@ -63,6 +60,7 @@ fun BottomNavGraph(
     navController: NavHostController,
     homeViewModel: HomeViewModel,
     goalViewModel: GoalViewModel,
+    settingsViewModel: SettingsViewModel
 ){
     NavHost(
         navController = navController,
@@ -71,7 +69,7 @@ fun BottomNavGraph(
         composable("home"){ HomeScreen(homeViewModel) }
         composable("history"){ HistoryScreen() }
         composable("goal"){ GoalScreen(goalViewModel, homeViewModel) }
-        composable("settings"){SettingsScreen()}
+        composable("settings"){SettingsScreen(settingsViewModel)}
     }
 }
 
