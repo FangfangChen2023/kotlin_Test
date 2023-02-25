@@ -5,6 +5,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +31,8 @@ import androidx.compose.ui.unit.sp
 import com.example.kotlin_2.GoalListItem
 import com.example.kotlin_2.data.model.GoalItem
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
@@ -37,6 +42,83 @@ import com.example.kotlin_2.screen.Goal.GoalViewModel
 import com.example.kotlin_2.screen.Home.HomeViewModel
 import com.example.kotlin_2.screen.Setting.SettingsViewModel
 import java.time.LocalDate
+
+@Composable
+fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel) {
+    // State variable for dialog visibility
+    var showDialog by remember { mutableStateOf(false) }
+    // State variables for text fields
+    var text1 by remember { mutableStateOf("") }
+    var text2 by remember { mutableStateOf(0) }
+
+    var allGoals: List<GoalItem> by remember { mutableStateOf( emptyList()) }
+    goalViewModel.goals.observeForever {
+        allGoals = it
+    }
+    var current: DailyStatus by remember { mutableStateOf(DailyStatus(currentSteps = 0, todayDate = LocalDate.now().toString(), goalName ="default", goalSteps = 5000)) }
+    homeViewModel.dailyDB.observeForever {
+        current = it
+    }
+
+    /*var stepsInput by remember { mutableStateOf(text2) }
+    var nameInput by remember { mutableStateOf(text1) }*/
+    //var newGoal = GoalItem("new", 0, false)
+    val focusManager = LocalFocusManager.current
+    // Button to show dialog
+    Button(onClick = { showDialog = true }) {
+        Text("Add Goal")
+    }
+
+    // Dialog with two text fields and a confirm button
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Create new goal") },
+            text = {
+                Column {
+                    TextField(
+                        value = text1,
+                        onValueChange = { text1 = it },
+                        label = { Text("New goals name")},
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            })
+                    )
+                    TextField(
+                        value = text2.toString(),
+                        onValueChange = { text2 = it.toInt() },
+                        label = { Text("New goal target") },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            })
+                    )
+                }
+            },
+            confirmButton = {
+                Button(onClick = {
+                    goalViewModel.onAddGoal(text1, text2, homeViewModel)
+                    focusManager.clearFocus()
+                    /*text1 = it
+                    text2 = it*/
+                    showDialog = false
+                    // Do something with text1 and text2 here
+                }) {
+                    Text("Confirm")
+                }
+            }
+        )
+    }
+}
 
 //@Preview
 @SuppressLint("UnrememberedMutableState")
@@ -57,7 +139,7 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
         modifier = Modifier
             .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.height(75.dp))
+        Spacer(Modifier.height(25.dp))
 
         //Text(text = "Goals")
 
@@ -70,11 +152,20 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
         /*homeViewModel.currentSteps.observeForever(Observer {
             steps = it
     })*/
-        var allGoals: List<GoalItem> by remember { mutableStateOf( emptyList()) }
+        var allGoals: List<GoalItem> by remember { mutableStateOf(emptyList()) }
         goalViewModel.goals.observeForever {
             allGoals = it
         }
-        var current: DailyStatus by remember { mutableStateOf(DailyStatus(currentSteps = 0, todayDate = LocalDate.now().toString(), goalName ="default", goalSteps = 5000)) }
+        var current: DailyStatus by remember {
+            mutableStateOf(
+                DailyStatus(
+                    currentSteps = 0,
+                    todayDate = LocalDate.now().toString(),
+                    goalName = "default",
+                    goalSteps = 5000
+                )
+            )
+        }
         homeViewModel.dailyDB.observeForever {
             current = it
         }
@@ -85,35 +176,61 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
             modifier = Modifier
                 .fillMaxWidth(),
             contentPadding = PaddingValues(all = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.Start
         ) {
-                itemsIndexed(items = allGoals) { index,
-                                                 goalItem ->
-                    Log.d("goal", index.toString())
-                    GoalListItem(goalItem = goalItem,
-                        onClick = {goalViewModel.onClickOnGoal(goalItem, current, homeViewModel)}
-                        /*onClick = {
+            itemsIndexed(items = allGoals) { index,
+                                             goalItem ->
+                Log.d("goal", index.toString())
+                GoalListItem(goalItem = goalItem,
+                    onClick = {
+                        goalViewModel.onClickOnGoal(
+                            goalItem,
+                            current,
+                            homeViewModel
+                        )
+                    }
+                    /*onClick = {
                             db.updateGoals(goalItem)
                             allGoals = db.readGoals()
                             editorGoal.putString("goal", goalItem.name);
                             editorGoal.commit();
                         }*/
-                    )
-                    if (!goalItem.active) {
+                )
+                if (!goalItem.active) {
+                    Row() {
                         /*TODO change this into prettier button*/
-                        Button( onClick = {goalViewModel.onDeleteGoal(goalItem)
+                        IconButton(onClick = {
+                            goalViewModel.onEditGoal(goalItem)
                         }) {
-                            Text(text = "X", style = TextStyle(fontSize = 16.sp))
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit"
+                            )
+                        }
+                        IconButton(onClick = {
+                            goalViewModel.onDeleteGoal(goalItem)
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete"
+                            )
                         }
                         /* TODO make goal editable  depending on preferences*/
                     }
                 }
+            }
         }
-        var stepsInput by remember { mutableStateOf(0) }
+        Spacer(Modifier.height(20.dp))
+        ButtonDialogExample(goalViewModel, homeViewModel)
+    }
+}
+
+        /*var stepsInput by remember { mutableStateOf(0) }
         var nameInput by remember { mutableStateOf("...") }
         //var newGoal = GoalItem("new", 0, false)
         val focusManager = LocalFocusManager.current
-        Spacer(Modifier.height(20.dp))
+
         OutlinedTextField(
             modifier = Modifier
                 .background(Color.Transparent),
@@ -127,7 +244,7 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
                 }
 
             },
-            /*TODO this should be a separate dialog and test for errors -> name has to be unique, steps too?, no emojis or numbers as names, also 0 steps does not make sense*/
+            *//*TODO this should be a separate dialog and test for errors -> name has to be unique, steps too?, no emojis or numbers as names, also 0 steps does not make sense*//*
             label = { Text(text = "Add Steps for New Goal") },
             placeholder = { Text(text = "") },
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -171,16 +288,16 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
                 onDone = {
                     //steps += stepsInput
                     //var steps = sharedPreference.getInt("currentSteps", 0)
-                    /*newGoal.name = nameInput
+                    *//*newGoal.name = nameInput
                     newGoal.steps = stepsInput
                     db.insertGoal(newGoal)
-                    allGoals = db.readGoals()*/
+                    allGoals = db.readGoals()*//*
                     goalViewModel.onAddGoal(stepsInput, nameInput, homeViewModel)
                     focusManager.clearFocus()
                     nameInput = "..."
                     stepsInput = 0;
                 })
         )
-    }
-}
+    }*/
+
 

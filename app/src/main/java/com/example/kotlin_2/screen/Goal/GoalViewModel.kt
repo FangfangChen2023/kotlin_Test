@@ -44,7 +44,7 @@ class GoalViewModel @Inject constructor(
         }
     }
 
-    fun onAddGoal(steps: Int, name: String, homeViewModel: HomeViewModel) {
+    fun onAddGoal(name: String, steps: Int, homeViewModel: HomeViewModel) {
         var newGoal = GoalItem(name, steps, false)
         // if there is no other goal, make that goal active
         viewModelScope.launch(Dispatchers.IO) {
@@ -61,6 +61,12 @@ class GoalViewModel @Inject constructor(
     }
 
     fun onDeleteGoal(goalItem: GoalItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            goalRepository.deleteGoal(goalItem)
+        }
+    }
+
+    fun onEditGoal(goalItem: GoalItem){
         viewModelScope.launch(Dispatchers.IO) {
             goalRepository.deleteGoal(goalItem)
         }
