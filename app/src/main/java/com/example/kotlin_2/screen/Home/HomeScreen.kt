@@ -35,7 +35,7 @@ import java.time.LocalTime
 
 @Composable
 fun HomeScreen(homeViewModel:HomeViewModel) {
-    var steps by remember { mutableStateOf(0) }
+//    var steps by remember { mutableStateOf(0) }
     var stepsInput by remember { mutableStateOf(0) }
     val focusManager = LocalFocusManager.current
     var inputEnabled   by remember { mutableStateOf(true) }
@@ -46,9 +46,12 @@ fun HomeScreen(homeViewModel:HomeViewModel) {
     var currentDaily: DailyStatus by remember {mutableStateOf (DailyStatus(currentSteps = 0, todayDate = LocalDate.now().toString(), goalName ="test", goalSteps = 5000)
     ) }
     //TODO on restart of the app it always first displays the default goal, then when you switch between tabs it displays the currently active goal?
-    homeViewModel.dailyDB.observeForever {
-        currentDaily = it
+    if(homeViewModel.isDailyDBInitialized()){
+        homeViewModel.dailyDB.observeForever {
+            currentDaily = it
+        }
     }
+
     /*var allGoals: List<GoalItem> by remember { mutableStateOf( emptyList()) }
         goalViewModel.goals.observeForever {
             allGoals = it

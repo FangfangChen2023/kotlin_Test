@@ -12,7 +12,7 @@ interface GoalDao {
     @Query("SELECT * FROM GoalItem WHERE active = 1")
     fun getActiveGoal(): GoalItem
 
-    @Insert()
+    @Insert
     fun insertGoal(goalItem: GoalItem)
 
     @Update

@@ -1,5 +1,6 @@
 package com.example.kotlin_2.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.kotlin_2.data.dao.GoalDao
 import com.example.kotlin_2.data.model.GoalItem
@@ -14,6 +15,11 @@ class GoalRepositoryImpl (
 
     override suspend fun deleteGoal(goalItem: GoalItem) {
         goalDao.deleteGoal(goalItem)
+        var goals = getAllGoals().value
+        if(goals!!.count()==1){
+            goals.first().active = true
+            updateGoal(goals.first())
+        }
     }
 
     override suspend fun updateGoal(goalItem: GoalItem){
@@ -28,7 +34,7 @@ class GoalRepositoryImpl (
         return goalDao.readGoals()
     }
 
-    override suspend fun getActiveGoal(): GoalItem? {
+    override suspend fun getActiveGoal(): GoalItem {
         return goalDao.getActiveGoal()
     }
 
@@ -43,24 +49,4 @@ class GoalRepositoryImpl (
 
     }
 
-//    fun getAllGoals(): List<GoalItem>{
-//        return listOf(
-//            GoalItem(
-//                steps = 1000,
-//                name = "Easy",
-//                active = true
-//            ),
-//            GoalItem(
-//                steps = 5000,
-//                name = "Medium",
-//                active = false
-//            ),
-//            GoalItem(
-//                steps = 10000,
-//                name = "Hard",
-//                active = false
-//            ),
-//
-//            )
-//    }
 }

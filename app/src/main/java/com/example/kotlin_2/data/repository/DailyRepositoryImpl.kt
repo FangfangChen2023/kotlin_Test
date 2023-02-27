@@ -17,8 +17,6 @@ class DailyRepositoryImpl(
     }
 
     override suspend fun getDaily(): LiveData<DailyStatus> {
-
-
         return dao.getDaily()
     }
 
@@ -30,8 +28,8 @@ class DailyRepositoryImpl(
         return dao.checkIfEmpty() == 0
     }
 
-    override suspend fun getOldDaily(): LiveData<List<DailyStatus>> {
-        return dao.getOldDaily()
-    }
+//    override suspend fun getOldDaily(): LiveData<List<DailyStatus>> {
+//        return dao.getOldDaily()
+//    }
 
 }

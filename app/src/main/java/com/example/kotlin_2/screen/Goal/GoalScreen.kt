@@ -1,14 +1,16 @@
 package com.example.kotlin_2.screen
 
-//import DataBaseHandler
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -32,15 +34,23 @@ import com.example.kotlin_2.GoalListItem
 import com.example.kotlin_2.data.model.GoalItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kotlin_2.data.model.DailyStatus
 import com.example.kotlin_2.screen.Goal.GoalViewModel
 import com.example.kotlin_2.screen.Home.HomeViewModel
 import com.example.kotlin_2.screen.Setting.SettingsViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
@@ -51,11 +61,20 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
     var text1 by remember { mutableStateOf("") }
     var text2 by remember { mutableStateOf(0) }
 
-    var allGoals: List<GoalItem> by remember { mutableStateOf( emptyList()) }
+    var allGoals: List<GoalItem> by remember { mutableStateOf(emptyList()) }
     goalViewModel.goals.observeForever {
         allGoals = it
     }
-    var current: DailyStatus by remember { mutableStateOf(DailyStatus(currentSteps = 0, todayDate = LocalDate.now().toString(), goalName ="default", goalSteps = 5000)) }
+    var current: DailyStatus by remember {
+        mutableStateOf(
+            DailyStatus(
+                currentSteps = 0,
+                todayDate = LocalDate.now().toString(),
+                goalName = "default",
+                goalSteps = 5000
+            )
+        )
+    }
     homeViewModel.dailyDB.observeForever {
         current = it
     }
@@ -79,7 +98,7 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
                     TextField(
                         value = text1,
                         onValueChange = { text1 = it },
-                        label = { Text("New goals name")},
+                        label = { Text("New goals name") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Done
@@ -106,7 +125,7 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
             },
             confirmButton = {
                 Button(onClick = {
-                    goalViewModel.onAddGoal(text1, text2, homeViewModel)
+                    goalViewModel.onEvent(UIEvent.AddGoal(text1, text2))
                     focusManager.clearFocus()
                     /*text1 = it
                     text2 = it*/
@@ -121,18 +140,10 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
 }
 
 //@Preview
+@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
-    /*TopAppBar(
-        title = { Text("iWalk") },
-        actions = {
-            // RowScope here, so these icons will be placed horizontally
-            IconButton(onClick = { /* doSomething() */ }) {
-                Icon(Icons.Filled.Settings, contentDescription = "Localized description")
-            }
-        }
-    )*/
+fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel) {
 
 
     Column(
@@ -156,6 +167,9 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
         goalViewModel.goals.observeForever {
             allGoals = it
         }
+//        if(allGoals.count()==1){
+//            allGoals.first().active=true
+//        }
         var current: DailyStatus by remember {
             mutableStateOf(
                 DailyStatus(
@@ -169,8 +183,24 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
         homeViewModel.dailyDB.observeForever {
             current = it
         }
-        //val sharedPreferenceGoal =  context.getSharedPreferences("goal", Context.MODE_PRIVATE)
-        //val editorGoal = sharedPreferenceGoal.edit()
+
+        val openDialog = remember { mutableStateOf(false) }
+        val (snackbarVisibleState, setSnackBarState) = remember { mutableStateOf(false) }
+
+        // When delete active goal, show message
+        if (snackbarVisibleState) {
+            Snackbar(
+                modifier = Modifier.padding(10.dp)
+            ) {
+                Text("Sorry! An active goal can't be deleted!")
+                LaunchedEffect(key1 = null, block = {
+                    delay(3000L)
+                    setSnackBarState(!snackbarVisibleState)
+                })
+
+
+            }
+        }
 
         LazyColumn(
             modifier = Modifier
@@ -181,27 +211,111 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
         ) {
             itemsIndexed(items = allGoals) { index,
                                              goalItem ->
-                Log.d("goal", index.toString())
-                GoalListItem(goalItem = goalItem,
-                    onClick = {
-                        goalViewModel.onClickOnGoal(
-                            goalItem,
-                            current,
-                            homeViewModel
+//                Log.d("goal", index.toString())
+                val dismissState = rememberDismissState(
+                    confirmStateChange = {
+                        if (it == DismissValue.DismissedToStart) {
+                            if (goalItem.active) setSnackBarState(!snackbarVisibleState)
+                            else openDialog.value = true
+                        }
+                        false
+                    }
+                )
+                // check dialog. Delete inactive goals
+                if (openDialog.value) {
+                    AlertDialog(
+                        onDismissRequest = { openDialog.value = false },
+                        title = { Text(text = "Delete Goal") },
+                        text = {
+                            Text("Are you sure you want to delete this goal?")
+                        },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                openDialog.value = false
+                                goalViewModel.onEvent(UIEvent.DeleteGoal(goalItem))
+                            }) {
+                                Text("Confirm")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = {
+                                openDialog.value = false
+                            }) {
+                                Text("Cancel")
+                            }
+                        },
+
+                        )
+                }
+
+                // Goals can be swiped to dismiss and delete
+                SwipeToDismiss(
+                    state = dismissState,
+                    modifier = Modifier.fillMaxWidth(),
+                    directions = setOf(DismissDirection.EndToStart),
+                    dismissThresholds = { FractionalThreshold(0.25f) },
+                    background = {
+                        val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+                        val color by animateColorAsState(
+                            when (dismissState.targetValue) {
+                                DismissValue.Default -> Color.LightGray
+                                DismissValue.DismissedToEnd -> Color.Green
+                                DismissValue.DismissedToStart -> Color.Yellow
+                            }
+                        )
+                        val alignment = when (direction) {
+                            DismissDirection.StartToEnd -> Alignment.CenterStart
+                            DismissDirection.EndToStart -> Alignment.CenterEnd
+                        }
+                        val icon = when (direction) {
+                            DismissDirection.StartToEnd -> Icons.Default.Done
+                            DismissDirection.EndToStart -> Icons.Default.Delete
+                        }
+                        val scale by animateFloatAsState(
+                            if (dismissState.targetValue == DismissValue.Default) 1f else 1.5f
+                        )
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(color)
+                                .padding(horizontal = 20.dp),
+                            contentAlignment = alignment,
+                        ) {
+                            Icon(
+                                icon,
+                                contentDescription = "Localized description",
+                                modifier = Modifier.scale(scale)
+                            )
+                        }
+                    },
+                    dismissContent = {
+                        GoalListItem(
+                            goalItem = goalItem,
+                            onClick = {},
+                            onEvent = goalViewModel::onEvent
                         )
                     }
-                    /*onClick = {
-                            db.updateGoals(goalItem)
-                            allGoals = db.readGoals()
-                            editorGoal.putString("goal", goalItem.name);
-                            editorGoal.commit();
-                        }*/
                 )
+//                GoalListItem(goalItem = goalItem,
+//                    onClick = {
+//                        goalViewModel.onClickOnGoal(
+//                            goalItem,
+//                            current,
+//                            homeViewModel
+//                        )
+//                    }
+//                    /*onClick = {
+//                            db.updateGoals(goalItem)
+//                            allGoals = db.readGoals()
+//                            editorGoal.putString("goal", goalItem.name);
+//                            editorGoal.commit();
+//                        }*/
+//                )
                 if (!goalItem.active) {
                     Row() {
                         /*TODO change this into prettier button*/
                         IconButton(onClick = {
-                            goalViewModel.onEditGoal(goalItem)
+                            goalViewModel.onEvent(UIEvent.EditGoal(goalItem))
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
@@ -209,7 +323,7 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
                             )
                         }
                         IconButton(onClick = {
-                            goalViewModel.onDeleteGoal(goalItem)
+                            goalViewModel.onEvent(UIEvent.DeleteGoal(goalItem))
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
@@ -226,25 +340,25 @@ fun GoalScreen(goalViewModel:GoalViewModel, homeViewModel: HomeViewModel) {
     }
 }
 
-        /*var stepsInput by remember { mutableStateOf(0) }
-        var nameInput by remember { mutableStateOf("...") }
-        //var newGoal = GoalItem("new", 0, false)
-        val focusManager = LocalFocusManager.current
+/*var stepsInput by remember { mutableStateOf(0) }
+var nameInput by remember { mutableStateOf("...") }
+//var newGoal = GoalItem("new", 0, false)
+val focusManager = LocalFocusManager.current
 
-        OutlinedTextField(
-            modifier = Modifier
-                .background(Color.Transparent),
+OutlinedTextField(
+    modifier = Modifier
+        .background(Color.Transparent),
 
-            value = stepsInput.toString(),
-            onValueChange = {
-                stepsInput = if (it.isNotEmpty()) {
-                    it.toInt()
-                } else {
-                    0
-                }
+    value = stepsInput.toString(),
+    onValueChange = {
+        stepsInput = if (it.isNotEmpty()) {
+            it.toInt()
+        } else {
+            0
+        }
 
-            },
-            *//*TODO this should be a separate dialog and test for errors -> name has to be unique, steps too?, no emojis or numbers as names, also 0 steps does not make sense*//*
+    },
+    *//*TODO this should be a separate dialog and test for errors -> name has to be unique, steps too?, no emojis or numbers as names, also 0 steps does not make sense*//*
             label = { Text(text = "Add Steps for New Goal") },
             placeholder = { Text(text = "") },
             colors = TextFieldDefaults.outlinedTextFieldColors(

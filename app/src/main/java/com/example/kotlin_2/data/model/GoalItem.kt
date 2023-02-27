@@ -9,5 +9,5 @@ data class GoalItem (
     @ColumnInfo(name = "name") var name : String,
     @ColumnInfo(name = "steps") var steps : Int,
     @ColumnInfo var active : Boolean,
-    @PrimaryKey var id:Int?=null
+    @PrimaryKey(autoGenerate = true) var id:Int?=null
 )

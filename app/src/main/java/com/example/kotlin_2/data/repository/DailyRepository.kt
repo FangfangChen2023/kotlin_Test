@@ -14,7 +14,7 @@ interface DailyRepository {
 
     suspend fun updateDaily(dailyStatus: DailyStatus)
 
-    suspend fun getOldDaily(): LiveData<List<DailyStatus>>
+//    suspend fun getOldDaily(): LiveData<List<DailyStatus>>
 
     suspend fun checkIfEmpty() : Boolean
 

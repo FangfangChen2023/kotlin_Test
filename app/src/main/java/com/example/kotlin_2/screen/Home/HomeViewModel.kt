@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.*
 import com.example.kotlin_2.data.model.DailyStatus
+import com.example.kotlin_2.data.model.GoalItem
 import com.example.kotlin_2.data.repository.DailyRepository
 import com.example.kotlin_2.data.repository.DailyRepositoryImpl
 import com.example.kotlin_2.data.repository.GoalRepository
@@ -20,16 +21,15 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val dailyRepository: DailyRepository,
-    //private  val goalRepository: GoalRepository
+    private  val goalRepository: GoalRepository
 
 ) : ViewModel() {
     //lateinit var goals : LiveData<List<GoalItem>>
-    lateinit var dailyDB: LiveData<DailyStatus> //= DailyStatus(currentSteps = 0, todayDate = LocalDate.now().toString(), goalName ="default", goalSteps = 5000)
+    lateinit var dailyDB: LiveData<DailyStatus>
     /*lateinit var dailySteps: MutableLiveData<Int> //= MutableLiveData(dailyDB.currentSteps)
     lateinit var dailyGoalName: MutableLiveData<String> //= MutableLiveData(dailyDB.goalName)
     lateinit var dailyGoalSteps: MutableLiveData<Int> //= MutableLiveData(dailyDB.goalSteps)*/
-    //var isDailyNotNull = MutableLiveData(false)
-    lateinit var dailyStatus: LiveData<List<DailyStatus>>
+//    lateinit var dailyStatus: LiveData<List<DailyStatus>>
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -42,8 +42,14 @@ class HomeViewModel @Inject constructor(
                         goalSteps = 5000
                     )
                 )
+                goalRepository.insertGoal(
+                    GoalItem(
+                        name = "default",
+                        steps = 5000,
+                        active = true
+                    )
+                )
             }
-            dailyStatus = dailyRepository.getOldDaily()
             dailyDB = dailyRepository.getDaily()
             //dailySteps = MutableLiveData(dailyDB.currentSteps)
 
@@ -54,6 +60,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun isDailyDBInitialized() = ::dailyDB.isInitialized
+
 //    var currentStepsPref = application.getSharedPreferences("currentSteps", Application.MODE_PRIVATE)
 //    var datePref = application.getSharedPreferences("date",Application.MODE_PRIVATE)
 //    var goalPref = application.getSharedPreferences("goal",Application.MODE_PRIVATE)
@@ -62,12 +70,12 @@ class HomeViewModel @Inject constructor(
 //    val editorDay = datePref.edit()
 //    val editorGoal = goalPref.edit()
 
-    suspend fun onGoalClick(newValue:DailyStatus){
-        dailyRepository.updateDaily(newValue)
-    }
-    suspend fun onAddClick(newValue: DailyStatus){
-        dailyRepository.insertDaily(newValue)
-    }
+//    suspend fun onGoalClick(newValue:DailyStatus){
+//        dailyRepository.updateDaily(newValue)
+//    }
+//    suspend fun onAddClick(newValue: DailyStatus){
+//        dailyRepository.insertDaily(newValue)
+//    }
     fun keyboardAction(stepsInput:Int=0, currentDaily:DailyStatus) {
         currentDaily.currentSteps += stepsInput
         viewModelScope.launch(Dispatchers.IO) {
@@ -75,6 +83,7 @@ class HomeViewModel @Inject constructor(
         }
 
     }
+
     /*
 
     private val _currentSteps = MutableLiveData( if(dailyDB!=null) dailyDB!!.currentSteps else 0)
