@@ -11,6 +11,13 @@ sealed class UIEvent {
     data class DeleteGoal(val goalItem: GoalItem):UIEvent()
     data class EditGoal(val goalItem: GoalItem):UIEvent()
 
+    data class DeleteActiveGoal(val goalItem: GoalItem):UIEvent()
+    data class DeactivateSnackBar(val bool: Boolean): UIEvent()
+    data class WriteMessageToSnackbar(val msg: String): UIEvent()
+
+    data class EditableGoals(val enabled: Boolean):UIEvent()
+    data class HistoricalActivityRecording(val enabled: Boolean): UIEvent()
+
     // Daily Status screen
 
     // History screen

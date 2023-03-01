@@ -1,31 +1,64 @@
 package com.example.kotlin_2.screen.Setting
 
-import android.app.Application
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.kotlin_2.R
-import com.example.kotlin_2.ReplyRoute
-import com.example.kotlin_2.ReplyTopLevelDestination
-import com.example.kotlin_2.data.model.HistoryItem
-import com.example.kotlin_2.screen.Home.HomeViewModel
-import com.example.kotlin_2.screen.HomeScreen
-import java.time.LocalDateTime
+import androidx.lifecycle.*
+import com.example.kotlin_2.data.model.Setting
+import com.example.kotlin_2.data.repository.SettingRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.kotlin_2.screen.UIEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SettingsViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val settingRepository : SettingRepository
+) : ViewModel() {
 
-    fun historicalActivityRecording(){
+    lateinit var setting: LiveData<Setting>
 
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (settingRepository.isEmpty()) {
+                settingRepository.insertSetting(Setting(false, true))
+            }
+            setting = settingRepository.getSetting()
+        }
     }
 
+    fun isSettingDBInitialized() = ::setting.isInitialized
 
-        //var date = datePref.getString("date", null)
-        //var curdate = currentDate.toString()
-        //Toast.makeText(context, "commited current date, $curdate, $date", Toast.LENGTH_SHORT).show()
+    fun onEvent(event: UIEvent) {
+        when (event) {
+            is UIEvent.EditableGoals -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    var cur = settingRepository.getSetting().value
+                    if (!event.enabled) {
+                        if (cur == null) {
+                            settingRepository.insertSetting(Setting(false, true))
+                        } else {
+                            cur.editable = true
+                            if (cur != null) settingRepository.updateSetting(cur)
+                        }
+                    } else {
+                        if (cur == null) {
+                            settingRepository.insertSetting(Setting(false, false))
+                        } else {
+                            cur.editable = false
+                            if (cur != null) settingRepository.updateSetting(cur)
+                        }
+                    }
+                }
+            }
+            is UIEvent.HistoricalActivityRecording -> {
+            }
+
+
+            //var date = datePref.getString("date", null)
+            //var curdate = currentDate.toString()
+            //Toast.makeText(context, "commited current date, $curdate, $date", Toast.LENGTH_SHORT).show()
+            else -> {}
+        }
+    }
 }

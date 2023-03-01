@@ -15,11 +15,11 @@ class GoalRepositoryImpl (
 
     override suspend fun deleteGoal(goalItem: GoalItem) {
         goalDao.deleteGoal(goalItem)
-        var goals = getAllGoals().value
+        /*var goals = getAllGoals().value
         if(goals!!.count()==1){
             goals.first().active = true
             updateGoal(goals.first())
-        }
+        }*/
     }
 
     override suspend fun updateGoal(goalItem: GoalItem){
@@ -36,6 +36,14 @@ class GoalRepositoryImpl (
 
     override suspend fun getActiveGoal(): GoalItem {
         return goalDao.getActiveGoal()
+    }
+
+    override suspend fun getGoalByName(name: String): GoalItem? {
+        return goalDao.getGoalByName(name)
+    }
+
+    override suspend fun getGoalBySteps(steps: Int): GoalItem? {
+        return goalDao.getGoalBySteps(steps)
     }
 
     override suspend fun setActiveGoal(goalItem: GoalItem) {

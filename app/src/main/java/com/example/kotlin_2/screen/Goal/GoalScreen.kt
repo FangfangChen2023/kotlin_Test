@@ -1,8 +1,11 @@
 package com.example.kotlin_2.screen
 
 import android.annotation.SuppressLint
+import android.app.Application
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 
@@ -45,6 +48,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kotlin_2.data.model.DailyStatus
+import com.example.kotlin_2.data.model.Setting
 import com.example.kotlin_2.screen.Goal.GoalViewModel
 import com.example.kotlin_2.screen.Home.HomeViewModel
 import com.example.kotlin_2.screen.Setting.SettingsViewModel
@@ -52,6 +56,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+
 
 @Composable
 fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel) {
@@ -65,6 +70,7 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
     goalViewModel.goals.observeForever {
         allGoals = it
     }
+
     var current: DailyStatus by remember {
         mutableStateOf(
             DailyStatus(
@@ -83,6 +89,33 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
     var nameInput by remember { mutableStateOf(text1) }*/
     //var newGoal = GoalItem("new", 0, false)
     val focusManager = LocalFocusManager.current
+    var (snackbarVisibleState, setSnackBarState) = remember { mutableStateOf(false) }
+    var (setSnackBarText) = remember { mutableStateOf("") }
+    //var (snackbarVisibleState) = remember { mutableStateOf(false) }
+
+    goalViewModel.message.observeForever {
+        setSnackBarText = it
+    }
+    /*goalViewModel.snackbarVisibleState.observeForever {
+        snackbarVisibleState = it
+    }*/
+
+
+    if (snackbarVisibleState) {
+        Snackbar(
+            modifier = Modifier.padding(10.dp)
+        ) {
+            //Text("Sorry! An active goal can't be deleted!")
+            Text(setSnackBarText)
+            LaunchedEffect(key1 = null, block = {
+                delay(3000L)
+                setSnackBarState(!snackbarVisibleState)
+                //goalViewModel.onEvent(UIEvent.DeactivateSnackBar(false))
+            })
+
+
+        }
+    }
     // Button to show dialog
     Button(onClick = { showDialog = true }) {
         Text("Add Goal")
@@ -110,7 +143,13 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
                     )
                     TextField(
                         value = text2.toString(),
-                        onValueChange = { text2 = it.toInt() },
+                        onValueChange = { //text2 = it.toInt()
+                            if (it != ""){
+                                text2 = it.toInt()}
+                            else{
+                                text2 = 0
+                            }
+                        },
                         label = { Text("New goal target") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number,
@@ -125,11 +164,16 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
             },
             confirmButton = {
                 Button(onClick = {
-                    goalViewModel.onEvent(UIEvent.AddGoal(text1, text2))
+                    goalViewModel.onEvent(//setSnackBarState(!snackbarVisibleState)
+                            UIEvent.AddGoal(text1, text2)
+                    )
+                    setSnackBarState(!snackbarVisibleState)
+
                     focusManager.clearFocus()
                     /*text1 = it
                     text2 = it*/
                     showDialog = false
+
                     // Do something with text1 and text2 here
                 }) {
                     Text("Confirm")
@@ -139,12 +183,20 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
     }
 }
 
+
+
 //@Preview
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel) {
+fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel){ //settingsViewModel: SettingViewModel) {
 
+    var setting: Setting by remember {mutableStateOf(Setting(false, true))}
+    if (goalViewModel.isSettingDBInitialized()) {
+        goalViewModel.setting.observeForever {
+            setting = it
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -167,6 +219,13 @@ fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel) {
         goalViewModel.goals.observeForever {
             allGoals = it
         }
+
+        /*goalViewModel.message.observeForever( Observer {
+            it.getContentIfNotHandled()?.let {
+                Toast.makeText(Context, it, Toast.LENGTH_LONG).show()
+
+            }
+        })*/
 //        if(allGoals.count()==1){
 //            allGoals.first().active=true
 //        }
@@ -185,17 +244,29 @@ fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel) {
         }
 
         val openDialog = remember { mutableStateOf(false) }
-        val (snackbarVisibleState, setSnackBarState) = remember { mutableStateOf(false) }
+        var (snackbarVisibleState, setSnackBarState) = remember { mutableStateOf(false) }
+        var (setSnackBarText) = remember { mutableStateOf("") }
+        //var (snackbarVisibleState) = remember { mutableStateOf(false) }
+
+        goalViewModel.message.observeForever {
+            setSnackBarText = it
+        }
+        /*goalViewModel.snackbarVisibleState.observeForever {
+            snackbarVisibleState = it
+        }*/
+
 
         // When delete active goal, show message
         if (snackbarVisibleState) {
             Snackbar(
                 modifier = Modifier.padding(10.dp)
             ) {
-                Text("Sorry! An active goal can't be deleted!")
+                //Text("Sorry! An active goal can't be deleted!")
+                Text(setSnackBarText)
                 LaunchedEffect(key1 = null, block = {
                     delay(3000L)
                     setSnackBarState(!snackbarVisibleState)
+                    //goalViewModel.onEvent(UIEvent.DeactivateSnackBar(false))
                 })
 
 
@@ -215,8 +286,12 @@ fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel) {
                 val dismissState = rememberDismissState(
                     confirmStateChange = {
                         if (it == DismissValue.DismissedToStart) {
-                            if (goalItem.active) setSnackBarState(!snackbarVisibleState)
+                            if (goalItem.active) {
+                                goalViewModel.onEvent(UIEvent.DeleteActiveGoal(GoalItem("default", 5000, false)))
+                                setSnackBarState(!snackbarVisibleState)
+                            }
                             else openDialog.value = true
+                            //if (!goalItem.active) openDialog.value = true
                         }
                         false
                     }
@@ -314,13 +389,15 @@ fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel) {
                 if (!goalItem.active) {
                     Row() {
                         /*TODO change this into prettier button*/
-                        IconButton(onClick = {
-                            goalViewModel.onEvent(UIEvent.EditGoal(goalItem))
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit"
-                            )
+                        if (setting.editable) {
+                            IconButton(onClick = {
+                                goalViewModel.onEvent(UIEvent.EditGoal(goalItem))
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Edit"
+                                )
+                            }
                         }
                         IconButton(onClick = {
                             goalViewModel.onEvent(UIEvent.DeleteGoal(goalItem))

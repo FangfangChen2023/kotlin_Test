@@ -12,6 +12,12 @@ interface GoalDao {
     @Query("SELECT * FROM GoalItem WHERE active = 1")
     fun getActiveGoal(): GoalItem
 
+    @Query("SELECT * FROM GoalItem WHERE name = :name")
+    fun getGoalByName(name: String): GoalItem?
+
+    @Query("SELECT * FROM GoalItem WHERE steps = :steps")
+    fun getGoalBySteps(steps: Int): GoalItem?
+
     @Insert
     fun insertGoal(goalItem: GoalItem)
 

@@ -17,12 +17,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.kotlin_2.data.model.Setting
+import com.example.kotlin_2.screen.UIEvent
 
 
 @Composable
 fun SettingsScreen(settingsViewModel: SettingsViewModel) {
 
-
+    var setting: Setting by remember {mutableStateOf(Setting(false, true))}
+    if (settingsViewModel.isSettingDBInitialized()) {
+        settingsViewModel.setting.observeForever {
+            setting = it
+        }
+    }
     /*TopAppBar(
         title = { Text("iWalk") },
         actions = {
@@ -43,7 +50,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
         )
     }
 
-        val option1Enabled = remember { mutableStateOf(false) }
+        val option1Enabled = remember { mutableStateOf(setting.editable)}//false) }
         val option2Enabled = remember { mutableStateOf(true) }
         val option3Enabled = remember { mutableStateOf(false) }
 
@@ -58,7 +65,10 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel) {
                         fontWeight = FontWeight.Bold)
                     Switch(
                         checked = option1Enabled.value,
-                        onCheckedChange = { option1Enabled.value = it }
+                        onCheckedChange = { settingsViewModel.onEvent(
+                            UIEvent.EditableGoals(option1Enabled.value))
+                            //setting.editable = it}
+                            option1Enabled.value = it }
                     )
                 }
                 item {

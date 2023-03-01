@@ -39,4 +39,10 @@ object AppModule {
     fun provideDailyRepository(db:AppDatabase): DailyRepository {
         return DailyRepositoryImpl(db.dailyDao())
     }
+
+    @Provides
+    @Singleton
+    fun provideSettingRepository(db:AppDatabase): SettingRepository {
+        return SettingRepositoryImpl(db.settingDao())
+    }
 }

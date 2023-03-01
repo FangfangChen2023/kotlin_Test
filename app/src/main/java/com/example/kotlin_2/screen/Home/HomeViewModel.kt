@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val dailyRepository: DailyRepository,
-    private  val goalRepository: GoalRepository
+    private val goalRepository: GoalRepository
 
 ) : ViewModel() {
     //lateinit var goals : LiveData<List<GoalItem>>
@@ -30,6 +30,7 @@ class HomeViewModel @Inject constructor(
     lateinit var dailyGoalName: MutableLiveData<String> //= MutableLiveData(dailyDB.goalName)
     lateinit var dailyGoalSteps: MutableLiveData<Int> //= MutableLiveData(dailyDB.goalSteps)*/
 //    lateinit var dailyStatus: LiveData<List<DailyStatus>>
+
 
     init {
         viewModelScope.launch(Dispatchers.IO) {

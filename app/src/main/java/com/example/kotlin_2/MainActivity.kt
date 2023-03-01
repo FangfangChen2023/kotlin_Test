@@ -22,9 +22,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val PREFS_NAME = "currentSteps"
+    /*val PREFS_NAME = "currentSteps"
     val PREFS_DAY = "date"
-    val PREFS_GOAL = "goal"
+    val PREFS_GOAL = "goal"*/
+    val  PREFS_EDITABLE = "editable"
 
     val homeViewModel: HomeViewModel by viewModels()
     val goalViewModel: GoalViewModel by viewModels ()
@@ -42,9 +43,9 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getSharedPreferences(PREFS_NAME, 0)
+        /*getSharedPreferences(PREFS_NAME, 0)
         getSharedPreferences(PREFS_DAY, 0)
-        getSharedPreferences(PREFS_GOAL, 0)
+        getSharedPreferences(PREFS_GOAL, 0)*/
         setContent {
             SettingsScreen(settingsViewModel)
             val navController = rememberNavController()
