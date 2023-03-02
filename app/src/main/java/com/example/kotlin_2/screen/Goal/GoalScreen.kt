@@ -15,9 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -47,6 +45,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kotlin_2.UIState
 import com.example.kotlin_2.data.model.DailyStatus
 import com.example.kotlin_2.data.model.Setting
 import com.example.kotlin_2.screen.Goal.GoalViewModel
@@ -70,6 +69,13 @@ fun ButtonDialogExample(goalViewModel: GoalViewModel, homeViewModel: HomeViewMod
     goalViewModel.goals.observeForever {
         allGoals = it
     }
+//    val uistate = goalViewModel.uistate.value
+//    if(uistate.goals.value!=null){
+//        uistate.goals.observeForever{
+//            allGoals = it
+//        }
+//    }
+
 
     var current: DailyStatus by remember {
         mutableStateOf(
@@ -216,6 +222,12 @@ fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel){ //se
             steps = it
     })*/
         var allGoals: List<GoalItem> by remember { mutableStateOf(emptyList()) }
+//        val uistate = goalViewModel.uistate.value
+//        if(uistate.goals.value!= null){
+//             uistate.goals.observeForever{
+//                 allGoals = it
+//            }
+//        }
         goalViewModel.goals.observeForever {
             allGoals = it
         }
@@ -267,6 +279,7 @@ fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel){ //se
                     delay(3000L)
                     setSnackBarState(!snackbarVisibleState)
                     //goalViewModel.onEvent(UIEvent.DeactivateSnackBar(false))
+
                 })
 
 
@@ -280,9 +293,11 @@ fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel){ //se
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.Start
         ) {
+
             itemsIndexed(items = allGoals) { index,
                                              goalItem ->
 //                Log.d("goal", index.toString())
+
                 val dismissState = rememberDismissState(
                     confirmStateChange = {
                         if (it == DismissValue.DismissedToStart) {
@@ -414,6 +429,7 @@ fun GoalScreen(goalViewModel: GoalViewModel, homeViewModel: HomeViewModel){ //se
         }
         Spacer(Modifier.height(20.dp))
         ButtonDialogExample(goalViewModel, homeViewModel)
+
     }
 }
 

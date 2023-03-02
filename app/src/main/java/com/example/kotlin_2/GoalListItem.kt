@@ -25,7 +25,7 @@ import java.time.LocalDate
 fun GoalListItem(
     goalItem : GoalItem,
     onClick: () -> Unit,
-    onEvent:(UIEvent) -> Unit
+    onEvent:(UIEvent) -> Unit,
 ){
     var color =
         if (goalItem.active){
@@ -79,11 +79,9 @@ fun GoalListItem(
                     fontSize = 30.sp
                 )
             }
-            var setActive = false
             Switch(
-                checked = setActive,
+                checked = false,
                 onCheckedChange = {
-                    setActive = it
                     if(it){
                         onEvent(UIEvent.SetGoalActive(goalItem))
                     }

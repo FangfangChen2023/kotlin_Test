@@ -2,12 +2,15 @@ package com.example.kotlin_2.screen.Goal
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin_2.Event
+import com.example.kotlin_2.UIState
 import com.example.kotlin_2.data.model.DailyStatus
 import com.example.kotlin_2.data.model.GoalItem
 import com.example.kotlin_2.data.model.Setting
@@ -32,10 +35,16 @@ class GoalViewModel @Inject constructor(
 ) : ViewModel() {
     //val allGoals : LiveData<List<GoalItem>>
     lateinit var goals: LiveData<List<GoalItem>>
+//    private val _uistate = mutableStateOf(UIState())
+//    val uistate : State<UIState> = _uistate
 
     init {
         viewModelScope.launch {
             goals = goalRepository.getAllGoals()
+//            _uistate.value = uistate.value.copy(
+//                goals = goalRepository.getAllGoals()
+//            )
+//            Log.d("Goals: ", _uistate.value.toString())
         }
     }
 
@@ -71,6 +80,14 @@ class GoalViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     goalRepository.setActiveGoal(event.goalItem)
                     goals = goalRepository.getAllGoals()
+//                    _uistate.value = uistate.value.copy(
+//                        goals = goalRepository.getAllGoals()
+//                    )
+                    // Refresh daily status
+                    dailyRepository.refreshDailyStatus(event.goalItem)
+
+//                    val daily = dailyRepository.getDaily()
+//                        UIEvent.RefreshDailyStatus(daily)
                 }
             }
 

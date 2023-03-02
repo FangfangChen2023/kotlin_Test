@@ -43,7 +43,8 @@ fun HomeScreen(homeViewModel:HomeViewModel) {
         goalViewModel.goals.observeForever {
             allGoals = it
         }*/
-    var currentDaily: DailyStatus by remember {mutableStateOf (DailyStatus(currentSteps = 0, todayDate = LocalDate.now().toString(), goalName ="test", goalSteps = 5000)
+    var currentDaily: DailyStatus by remember {mutableStateOf (
+        DailyStatus(currentSteps = 0, todayDate = LocalDate.now().toString(), goalName ="test", goalSteps = 5000)
     ) }
     //TODO on restart of the app it always first displays the default goal, then when you switch between tabs it displays the currently active goal?
     if(homeViewModel.isDailyDBInitialized()){

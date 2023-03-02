@@ -35,6 +35,6 @@ class SettingRepositoryImpl(
     }
 
     override suspend fun isEmpty(): Boolean {
-        return settingDao.getSetting() == null
+        return settingDao.getSetting().value == null
     }
 }

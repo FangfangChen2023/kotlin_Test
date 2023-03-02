@@ -1,10 +1,11 @@
 package com.example.kotlin_2.screen
 
+import androidx.lifecycle.LiveData
 import com.example.kotlin_2.data.model.DailyStatus
 import com.example.kotlin_2.data.model.GoalItem
+import com.example.kotlin_2.data.repository.DailyRepository
 
 sealed class UIEvent {
-    // Goals screen
     data class SetGoalActive(val goalItem : GoalItem):UIEvent()
     data class ClickOnGoal(val goalItem: GoalItem, val dailyStatus: DailyStatus):UIEvent()
     data class AddGoal(val name: String, val steps: Int):UIEvent()
@@ -18,7 +19,4 @@ sealed class UIEvent {
     data class EditableGoals(val enabled: Boolean):UIEvent()
     data class HistoricalActivityRecording(val enabled: Boolean): UIEvent()
 
-    // Daily Status screen
-
-    // History screen
 }

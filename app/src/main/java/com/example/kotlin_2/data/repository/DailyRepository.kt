@@ -2,6 +2,7 @@ package com.example.kotlin_2.data.repository
 
 import androidx.lifecycle.LiveData
 import com.example.kotlin_2.data.model.DailyStatus
+import com.example.kotlin_2.data.model.GoalItem
 
 interface DailyRepository {
     suspend fun insertDaily(dailyStatus: DailyStatus)
@@ -17,5 +18,7 @@ interface DailyRepository {
 //    suspend fun getOldDaily(): LiveData<List<DailyStatus>>
 
     suspend fun checkIfEmpty() : Boolean
+
+    suspend fun refreshDailyStatus(goalItem: GoalItem)
 
 }

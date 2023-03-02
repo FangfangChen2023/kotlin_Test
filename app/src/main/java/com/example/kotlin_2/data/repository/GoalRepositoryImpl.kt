@@ -1,14 +1,12 @@
 package com.example.kotlin_2.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.kotlin_2.data.dao.GoalDao
 import com.example.kotlin_2.data.model.GoalItem
-import kotlinx.coroutines.flow.Flow
 
-class GoalRepositoryImpl (
+class GoalRepositoryImpl(
     private val goalDao: GoalDao
-        ) : GoalRepository {
+) : GoalRepository {
     override suspend fun insertGoal(goalItem: GoalItem) {
         goalDao.insertGoal(goalItem)
     }

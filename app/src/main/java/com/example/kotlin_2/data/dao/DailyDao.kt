@@ -3,6 +3,7 @@ package com.example.kotlin_2.data.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.kotlin_2.data.model.DailyStatus
+import com.example.kotlin_2.data.model.GoalItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,8 +14,9 @@ interface DailyDao {
     @Delete
     suspend fun deleteDaily(dailyStatus: DailyStatus)
 
+    // Query can only return a list
     @Query("select * from DailyStatus")
-    fun getDaily() : LiveData<DailyStatus>
+    fun getDaily() : List<DailyStatus>
 
     @Query("select * from DailyStatus")
     fun getOldDaily() : LiveData<List<DailyStatus>>
@@ -24,5 +26,6 @@ interface DailyDao {
 
     @Update
     suspend fun updateDaily(dailyStatus: DailyStatus)
+
 
 }

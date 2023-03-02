@@ -11,8 +11,11 @@ import com.example.kotlin_2.data.repository.DailyRepository
 import com.example.kotlin_2.data.repository.DailyRepositoryImpl
 import com.example.kotlin_2.data.repository.GoalRepository
 import com.example.kotlin_2.data.repository.GoalRepositoryImpl
+import com.example.kotlin_2.screen.UIEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -62,6 +65,22 @@ class HomeViewModel @Inject constructor(
     }
 
     fun isDailyDBInitialized() = ::dailyDB.isInitialized
+
+    private val _uiEvent = Channel<UIEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
+
+    fun onEvent(event:UIEvent){
+//        when(event){
+//            is UIEvent.RefreshDailyStatus -> {
+//                viewModelScope.launch(Dispatchers.IO) {
+//                    dailyDB = event.dailyStatus
+//                }
+//
+//            }
+//            else -> Unit
+//        }
+
+    }
 
 //    var currentStepsPref = application.getSharedPreferences("currentSteps", Application.MODE_PRIVATE)
 //    var datePref = application.getSharedPreferences("date",Application.MODE_PRIVATE)
